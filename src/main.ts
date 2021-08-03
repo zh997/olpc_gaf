@@ -43,7 +43,6 @@ app.use(ConfigProvider);
 app.use(router)
 app.use(Toast);
 app.use(VueI18n);
-// Locale.use('en-US', enUS);
 
 
 app.mount('#app');

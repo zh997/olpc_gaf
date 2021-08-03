@@ -1,0 +1,113 @@
+@import url('@/styles/theme_vars.less');
+@import url('@/styles/mixin.less');
+
+.olpcgaf-homepage{
+    min-height: 100vh;
+    padding-bottom: 60px;
+    box-sizing: border-box;
+    background-color: #000;
+    &-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 46px 55px 0 77px;
+        &-logo{
+            width: 92px;
+            height: 54px;
+        }
+        &-btn{
+            width: 198px;
+            height: 77px;
+            border-radius: 30px;
+            .bg-linear-gradint;
+            color: #fff;
+            font-size: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    &-largetext{
+        font-size: 50px;
+        color: #fff;
+        text-align: center;
+        margin: 0;
+    }
+    &-largelogo{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 132px;
+        margin-bottom: 55px;
+        > img {
+            width: 513px;
+            height: 304px;
+        }
+    }
+    &-text{
+        font-size: 32px;
+        color: #fff;
+        margin: 0;
+        font-weight: bold;
+        text-align: center;
+        line-height: 56px
+    }
+
+
+    &-shadowcard{
+        width: 638px;
+        border-radius: 20px;
+        background-color: @color-141419;
+        margin: 60px auto 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: column;
+        box-shadow: 0px 0px 40px @color-300C79;
+        &-logos{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            color: #fff;
+            margin-top: 90px;
+            > img {
+                margin-top:  0;
+            }
+            > span{
+                margin: 0 50px;
+            }
+        }
+        &-logo{
+            width: 181px;
+            height: 181px;
+            margin-top: 90px;
+        }
+        &-title{
+            color:  @color-4D01F7;
+            background-image: linear-gradient(-73deg, #454545 0%, #6D0FA1 0%, #4D01F7 99.12109375%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 50px;
+            font-weight: bold;
+            margin: 67px 0 41px 0;
+        }
+        &-text{
+            font-size: 28px;
+            color: #fff;
+        }
+        &-btn{
+            width: 391px;
+            height: 77px;
+            border-radius: 30px;
+            .bg-linear-gradint;
+            color: #fff;
+            font-size: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 50px 0;
+        }
+    }
+   
+}

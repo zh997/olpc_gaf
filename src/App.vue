@@ -2,22 +2,18 @@
    <div class="safe-area">
      <router-view v-if="isShowRouter"></router-view>
    </div>
-   <TabbarPage v-if="isShowTabbar"/>
+   <!-- <TabbarPage v-if="isShowTabbar"/> -->
 </template>
 
 <script lang="ts">
 import { onMounted, ref } from 'vue';
-import { Button } from 'vant';
 import { useGlobalHooks } from '@/hooks';
-import TabbarPage from '@/pages/tabbar_page/index.vue';
 import { getTronlinkAddress } from '@/tronlink/index';
 import * as services from '@/services'; 
 import * as utils from '@/utils/index';
 
 export default {
    components: {
-    TabbarPage,
-    Button
   },
   setup(){
     const { isShowTabbar, onGetMoneyConfig } = useGlobalHooks();

@@ -1,4 +1,4 @@
-# vue3-template
+# olpc-gaf
 
 ## Project setup
 ```

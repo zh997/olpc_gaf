@@ -4,7 +4,6 @@
 </template>
 
 <script lang='ts'>
-
 export default {
     name: 'my_page',
     components:{

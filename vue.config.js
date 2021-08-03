@@ -1,5 +1,5 @@
 module.exports = {
-    publicPath: '/',
+    publicPath: '/olpc',
     configureWebpack: {
         devtool: 'source-map'
     },
