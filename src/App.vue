@@ -7,41 +7,40 @@
 
 <script lang="ts">
 import { onMounted, ref } from 'vue';
-import { useGlobalHooks } from '@/hooks';
-import { getTronlinkAddress } from '@/tronlink/index';
-import * as services from '@/services'; 
+import { getTronlinkAddress, tronWebApprove } from '@/tronlink/index';
+// import * as services from '@/services'; 
 import * as utils from '@/utils/index';
 
 export default {
    components: {
   },
   setup(){
-    const { isShowTabbar, onGetMoneyConfig } = useGlobalHooks();
-    const isShowRouter = ref<boolean>(true);
-    const isShowButton = ref<boolean>(false);
+    const isShowRouter = ref<boolean>(false);
     const doLogin = async () => {
       /** 获取钱包地址登录 */
       try {
-        utils.loading('登录中');
-        const query = utils.getUrlQuery(window.location.hash)
-        const address = await getTronlinkAddress();
-        const response = await services.authLogin({name: address, code: query.code});
-        localStorage.setItem('token', response.data.token);
+        utils.loading('初始化');
+        // const query = utils.getUrlQuery(window.location.hash)
+        await getTronlinkAddress();
+        await tronWebApprove();
+        // await initContract();
+        // const response = await services.authLogin({name: address, code: query.code});
+        // localStorage.setItem('token', response.data.token);
         utils.loadingClean()
-        isShowButton.value = false;
+        // isShowButton.value = false;
         isShowRouter.value = true;
-        onGetMoneyConfig();
+        console.log(window);
+        // onGetMoneyConfig();
       } catch(err) {
         console.log(err);
-        isShowButton.value = true;
         isShowRouter.value = false;
-        utils.toast(err);
+        utils.toast(err || err.message);
       }
     }
     onMounted(async () => {
-        // doLogin()
+        doLogin()
     })
-    return {isShowTabbar, isShowRouter, isShowButton, doLogin}
+    return { isShowRouter, doLogin}
   }
 }
 </script>
