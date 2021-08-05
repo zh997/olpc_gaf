@@ -7,7 +7,7 @@ module.exports = {
     chainWebpack: config =>{
         config.plugin('html')
         .tap(args => {
-            args[0].title = "HQMC";
+            args[0].title = "OLPC";
             return args;
         })
     },
