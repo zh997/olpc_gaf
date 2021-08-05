@@ -3,8 +3,11 @@
   <div class="olpcgaf-homepage">
     <div class="olpcgaf-homepage-header">
      <img src="../../assets/LOGO@3x.png" class="olpcgaf-homepage-header-logo" alt="">
-     <div class="olpcgaf-homepage-header-btn">
+      <div class="olpcgaf-homepage-header-btn" @click="onGetWellet" v-if="!wellet_address">
        我的钱包
+     </div>
+     <div class="olpcgaf-homepage-header-address" v-else>
+       {{wellet_address}}
      </div>
     </div>
     <div class="olpcgaf-homepage-largelogo">
@@ -65,12 +68,12 @@
 
 <script lang='ts'>
 import { useRouter } from 'vue-router';
+import { useGlobalHooks } from '@/hooks';
 import * as routerPaths from '@/constants/app_routes_path';
-import {  SinglePie } from '@/tronlink/index';
 export default {
     name: 'home_page',
     setup() {
-      const singlePie = new SinglePie();
+      const { wellet_address, onGetWellet } = useGlobalHooks();
       const router = useRouter();
       const onRouter = (path: string) => {
         router.push(path)
@@ -78,7 +81,7 @@ export default {
       const onOpenWemmet = () => {
         window.location.href = 'wemeet://'
       }
-      return {routerPaths, onRouter, onOpenWemmet} 
+      return {routerPaths,wellet_address, onRouter, onGetWellet, onOpenWemmet} 
     }
   };
 </script>

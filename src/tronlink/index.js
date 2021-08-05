@@ -66,29 +66,29 @@ export class SinglePie {
 
     /** 获取矿池总质押数量 */
     getTotalAmount() {
-            return window.singlePieContract.getTotalAmount()
-        }
-        /** 获取矿池总质押数量 */
+        return window.singlePieContract.getTotalAmount()
+    }
+    /** 获取用户收益 */
     userIncome() {
-            return window.singlePieContract.userIncome(this.wellet_address).call();
-        }
-        /** 获取用户质押数量 */
+        return window.singlePieContract.userIncome(this.wellet_address).call();
+    }
+    /** 获取用户质押数量 */
     getUserStakeAsset() {
-            return window.singlePieContract.getUserStakeAsset(this.wellet_address).call();
-        }
-        /** 进行资产质押 */
+        return window.singlePieContract.getUserStakeAsset(this.wellet_address).call();
+    }
+    /** 进行资产质押 */
     updateOneAsset(amount) {
-            return window.singlePieContract.updateOneAsset(this.wellet_address, window.tronWeb.toHex(amount)).send();
-        }
-        /** 用户解除挖矿 */
+        return window.singlePieContract.updateOneAsset(this.wellet_address, window.tronWeb.toHex(amount)).send();
+    }
+    /** 用户解除挖矿 */
     withdrawOneAsset(amount) {
-            return window.singlePieContract.withdrawOneAsset(this.wellet_address, window.tronWeb.toHex(amount)).send();
-        }
-        /** 用户提取收益 */
+        return window.singlePieContract.withdrawOneAsset(this.wellet_address, window.tronWeb.toHex(amount)).send();
+    }
+    /** 用户提取收益 */
     claim(amount) {
-            return window.singlePieContract.claim(this.wellet_address, window.tronWeb.toHex(amount)).send();
-        }
-        /** 获取用户是否需要对当前币种进行授权 */
+        return window.singlePieContract.claim(this.wellet_address, window.tronWeb.toHex(amount)).send();
+    }
+    /** 获取用户是否需要对当前币种进行授权 */
     getTokenAllownceAmount(token) {
         return window.singlePieContract.getTokenAllownceAmount(this.wellet_address, token).call();
     }
@@ -102,41 +102,42 @@ export class MultiPie {
 
     /** 矿池内两币种的质押总量 */
     getTotalAmount() {
-            return window.multiPieContract.getTotalAmount()
-        }
-        /** 获取用户收益 */
+        return window.multiPieContract.getTotalAmount()
+    }
+    /** 获取用户收益 */
     userIncome() {
-            return window.multiPieContract.userIncome(this.wellet_address).call();
-        }
-        /** 获取用户两个币种的各自质押数量 */
+        return window.multiPieContract.userIncome(this.wellet_address).call();
+    }
+    /** 获取用户两个币种的各自质押数量 */
     getUserStakeAsset() {
-            return window.multiPieContract.getUserStakeAsset(this.wellet_address).call();
-        }
-        /** 用户进行两种币种质押 */
-    provideTwoAsset(tokenA, tokenB, amountA, amountB) {
-            return window.multiPieContract.provideTwoAsset(
-                tokenA,
-                tokenB,
-                window.tronWeb.toHex(amountA),
-                window.tronWeb.toHex(amountB),
-                this.wellet_address,
-            ).send();
-        }
-        /** 获取用户是否需要对当前币种进行授权 */
+        return window.multiPieContract.getUserStakeAsset(this.wellet_address).call();
+    }
+    /** 用户进行两种币种质押 */
+    provideTwoAsset(amountA, amountB) {
+        return window.multiPieContract.provideTwoAsset(
+            tokenAddress.GAFP,
+            tokenAddress.OLPP,
+            window.tronWeb.toHex(amountA),
+            window.tronWeb.toHex(amountB),
+            this.wellet_address,
+        ).send();
+    }
+    /** 获取用户是否需要对当前币种进行授权 */
     getTokenAllownceAmount(token) {
-            return window.multiPieContract.getTokenAllownceAmount(this.wellet_address, token).call();
-        }
-        /** 解除两种资产挖矿 */
-    withdrawTwoAsset(tokenA, tokenB, amountA, amountB) {
-            return window.oneContract.withdrawTwoAsset(
-                this.wellet_address, tokenA, tokenB,
-                window.tronWeb.toHex(amountA),
-                window.tronWeb.toHex(amountB),
-            ).send();
-        }
-        /** 用户提取挖矿收益 */
+        return window.multiPieContract.getTokenAllownceAmount(this.wellet_address, token).call();
+    }
+    /** 解除两种资产挖矿 */
+    withdrawTwoAsset( amountA, amountB) {
+        return window.oneContract.withdrawTwoAsset(
+            this.wellet_address, tokenAddress.GAFP,
+            tokenAddress.OLPP,
+            window.tronWeb.toHex(amountA),
+            window.tronWeb.toHex(amountB),
+        ).send();
+    }
+    /** 用户提取挖矿收益 */
     claim(amount) {
-        return window.multiPieContract.claim(wellet_address, window.tronWeb.toHex(amount)).call();
+        return window.multiPieContract.claim(this.wellet_address, window.tronWeb.toHex(amount)).call();
     }
 
 }
