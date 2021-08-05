@@ -78,8 +78,6 @@ export default {
       const onOpenWemmet = () => {
         window.location.href = 'wemeet://'
       }
-      // singlePie.updateOneAsset(10);
-      // console.log(singlePie.updateOneAsset(10));
       return {routerPaths, onRouter, onOpenWemmet} 
     }
   };

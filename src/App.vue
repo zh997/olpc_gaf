@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { onMounted, ref } from 'vue';
-import { getTronlinkAddress, tronWebApprove } from '@/tronlink/index';
+import { getTronlinkAddress, tronWebApprove, initContract } from '@/tronlink/index';
 // import * as services from '@/services'; 
 import * as utils from '@/utils/index';
 
@@ -20,20 +20,13 @@ export default {
       /** 获取钱包地址登录 */
       try {
         utils.loading('初始化');
-        // const query = utils.getUrlQuery(window.location.hash)
         await getTronlinkAddress();
-        await tronWebApprove();
-        // await initContract();
-        // const response = await services.authLogin({name: address, code: query.code});
-        // localStorage.setItem('token', response.data.token);
-        utils.loadingClean()
-        // isShowButton.value = false;
+        await initContract();
+        utils.loadingClean();
         isShowRouter.value = true;
-        console.log(window);
-        // onGetMoneyConfig();
+        // console.log(window);
       } catch(err) {
         console.log(err);
-        isShowRouter.value = false;
         utils.toast(err || err.message);
       }
     }
