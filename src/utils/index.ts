@@ -27,3 +27,13 @@ export const loading = (text: string) => {
 export const loadingClean = () =>  Toast.clear();
 
 export const toast = (text: string) => Toast(text);
+
+export const toFixed = (amount: any, n: any) => {
+    n = n ? parseInt(n) : 0;
+	if(n <= 0) {
+		return Math.round(amount);
+	}
+	amount = Math.round(amount * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+	amount = Number(amount).toFixed(n); //补足位数
+	return amount;
+}

@@ -17,7 +17,7 @@
         }
         &-logo{
             width: 92px;
-            height: 54px;
+            height: 76.22px;
         }
         &-btn{
             width: 198px;
@@ -45,7 +45,7 @@
         margin-bottom: 55px;
         > img {
             width: 513px;
-            height: 304px;
+            height: 426px;
         }
     }
     &-text{
@@ -91,7 +91,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            min-width: 391px;
             box-sizing: border-box;
         }
         &-title-label{
@@ -107,7 +106,6 @@
             font-size: 50px;
             font-weight: bold;
             flex: 1;
-            text-align: right;
         }
         &-text{
             font-size: 28px;
@@ -126,20 +124,21 @@
             align-items: center;
             margin: 50px 0 0 0;
         }
+        
     }
    
 }
 
 .popup-form-wrap{
-    width: 600px;
-    padding: 100px 20px 40px 20px;
+    // width: 600px;
+    padding: 80px 50px 40px 50px;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     .popup-form-item{
-        width: 450px;
+        width: 100%;
         height: 100px;
         font-size: 30px;
         border:1px solid #eee;
@@ -147,5 +146,53 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 30px;
+    }
+    .popup-form-title{
+        font-size: 30px;
+        margin-bottom: 80px;
+    }
+    .popup-form-count{
+        width: 100%;
+        text-align: right;
+        font-size: 30px;
+        > span{
+            color: @color-4D01F7;
+        }
+    }
+    .popup-footer{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin: 80px 0 50px 0;
+        &-btn{
+            height: 77px;
+            border-radius: 30px;
+            flex: 1;
+            .bg-linear-gradint;
+            color: #fff;
+            font-size: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+           
+        }
+    }
+    .border-btn{
+        background: #eee;
+        color: @color-4D01F7;
+    }
+    .popup-form-item-unit{
+        font-size: 26px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 26px;
+        > span{
+            color: @color-4D01F7;
+            margin-left: 10px;
+            border-left: 1px solid #000;
+            padding-left: 10px;
+        }
     }
 }

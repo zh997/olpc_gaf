@@ -2,7 +2,7 @@
 <template>
   <div class="olpcgaf-homepage">
     <div class="olpcgaf-homepage-header">
-     <img src="../../assets/LOGO@3x.png" class="olpcgaf-homepage-header-logo" alt="">
+     <img src="../../assets/3.png" class="olpcgaf-homepage-header-logo" alt="">
      <div class="olpcgaf-homepage-header-btn" @click="onGetWellet" v-if="!wellet_address">
        我的钱包
      </div>
@@ -11,7 +11,7 @@
      </div>
     </div>
     <div class="olpcgaf-homepage-largelogo">
-      <img src="../../assets/LOGO@3x.png" alt="">
+      <img src="../../assets/3.png" alt="">
     </div>
     <p class="olpcgaf-homepage-largetext">OLPC-TRX LP</p>
     <p class="olpcgaf-homepage-text">质押OLPC/TRX LP获取更多OLPC</p>
@@ -22,13 +22,13 @@
         </div>
       
        <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needGafpApprove">
-          <div class="olpcgaf-homepage-shadowcard-title-label">收益</div>
+          <!-- <div class="olpcgaf-homepage-shadowcard-title-label">收益</div> -->
           <div class="olpcgaf-homepage-shadowcard-title-value">{{singleUserIncome}}</div>
        </div>
-        <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needGafpApprove">
+        <!-- <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needGafpApprove">
           <div class="olpcgaf-homepage-shadowcard-title-label">数量</div>
           <div class="olpcgaf-homepage-shadowcard-title-value">{{singleAmount}}</div>
-       </div>
+       </div> -->
        <p class="olpcgaf-homepage-shadowcard-text" v-if="!needGafpApprove">待授权</p>
        <div class="olpcgaf-homepage-shadowcard-btn" @click="onApprove(pieAddress.single,tokenAddress.GAFP)" v-if="!needGafpApprove">授权</div>
        <div class="olpcgaf-homepage-shadowcard-btn" v-if="needGafpApprove" @click="onShowPopup('GAFP', 'PLEDGE')">质押</div>
@@ -37,22 +37,22 @@
     </div>
     <div class="olpcgaf-homepage-shadowcard">
       <div class="olpcgaf-homepage-shadowcard-logos">
-         <img src="../../assets/gary_logo.png" class="olpcgaf-homepage-shadowcard-logo" alt=""> 
+         <img src="../../assets/4.png" class="olpcgaf-homepage-shadowcard-logo" alt=""> 
          <span>+</span> 
          <img src="../../assets/gary_logo_1@2x.png" class="olpcgaf-homepage-shadowcard-logo" alt=""> 
       </div>
        <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needDoubleApprove">
-          <div class="olpcgaf-homepage-shadowcard-title-label">收益</div>
+          <!-- <div class="olpcgaf-homepage-shadowcard-title-label">收益</div> -->
           <div class="olpcgaf-homepage-shadowcard-title-value">{{doubleUserIncome}}</div>
        </div>
-        <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needDoubleApprove">
+        <!-- <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needDoubleApprove">
           <div class="olpcgaf-homepage-shadowcard-title-label">GAF 数量</div>
           <div class="olpcgaf-homepage-shadowcard-title-value">{{doubleAmountA}}</div>
        </div>
         <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needDoubleApprove">
           <div class="olpcgaf-homepage-shadowcard-title-label">OLPP 数量</div>
           <div class="olpcgaf-homepage-shadowcard-title-value">{{doubleAmountB}}</div>
-       </div>
+       </div> -->
        <p class="olpcgaf-homepage-shadowcard-text" v-if="!needDoubleApprove">待授权</p>
        <div class="olpcgaf-homepage-shadowcard-btn" @click="onApproveDuoble" v-if="!needDoubleApprove">授权</div>
        <div class="olpcgaf-homepage-shadowcard-btn" v-if="needDoubleApprove" @click="onShowPopup('GAFP+OLPP','PLEDGE')">质押</div>
@@ -61,29 +61,52 @@
     </div>
     <div class="olpcgaf-homepage-shadowcard">
       <div class="olpcgaf-homepage-shadowcard-logos">
-           <img src="../../assets/gary_logo.png" class="olpcgaf-homepage-shadowcard-logo" alt="">
+           <img src="../../assets/4.png" class="olpcgaf-homepage-shadowcard-logo" alt="">
       </div>
     
          <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needOlpcApprove">
-          <div class="olpcgaf-homepage-shadowcard-title-label">收益</div>
+          <!-- <div class="olpcgaf-homepage-shadowcard-title-label">收益</div> -->
           <div class="olpcgaf-homepage-shadowcard-title-value">{{singleUserIncome}}</div>
        </div>
-        <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needOlpcApprove">
+        <!-- <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needOlpcApprove">
           <div class="olpcgaf-homepage-shadowcard-title-label">数量</div>
           <div class="olpcgaf-homepage-shadowcard-title-value">{{singleAmount}}</div>
-       </div>
+       </div> -->
         <p class="olpcgaf-homepage-shadowcard-text" v-if="!needOlpcApprove">待授权</p>
        <div class="olpcgaf-homepage-shadowcard-btn"  @click="onApprove(pieAddress.single,tokenAddress.OLPP)" v-if="!needOlpcApprove">授权</div>
        <div class="olpcgaf-homepage-shadowcard-btn" v-if="needOlpcApprove && singleUserIncome > 0"  @click="onShowPopup('OLPP', 'PLEDGE')">质押</div>
        <div class="olpcgaf-homepage-shadowcard-btn" v-if="needOlpcApprove && singleAmount > 0"  @click="onShowPopup('OLPP', 'REDEEM')">收获</div>
     </div>
   </div>
-  <van-popup v-model:show="visible" @close="onPopupClose" closeable>
+  <van-popup v-model:show="visible" @close="onPopupClose" position="bottom">
       <div class="popup-form-wrap">
-        <van-field v-model="olppAmount" v-if="pledgeType === 'OLPP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入OLPP ${OperTypeText[operType]}数量`" />
-        <van-field v-model="gafpAmount" v-if="pledgeType === 'GAFP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入GAFP ${OperTypeText[operType]}数量`" />
-        <van-field v-model="doubleIncomeAmount" v-if="pledgeType === 'GAFP+OLPP' && operType === 'HARVEST'" class="popup-form-item" type="number" :placeholder="`请输入收获OPLC + GAFP数量`" />
-        <div class="olpcgaf-homepage-shadowcard-btn" @click="onConfirm">确认{{OperTypeText[operType]}}</div>
+        <div class="popup-form-title">{{OperTypeText[operType]}}OSK-TRX LP</div>
+        <van-field v-model="olppAmount" v-if="pledgeType === 'OLPP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType !== 'HARVEST' ? 'OLPC' :'OLPP'} ${OperTypeText[operType]}数量`">
+          <template #button>
+            <div class="popup-form-item-unit">OSK-TRX LP <span @click="onSetAll">全部</span></div>
+          </template>
+        </van-field>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountB}}</span> OSK-TRX LP可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> OSK-TRX LP可用</div>
+        <van-field v-model="gafpAmount" v-if="pledgeType === 'GAFP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType !== 'HARVEST' ? 'OLPC' :'GAFP'} ${OperTypeText[operType]}数量`" >
+          <template #button>
+            <div class="popup-form-item-unit">OSK-TRX LP <span @click="onSetAll">全部</span></div>
+          </template>
+        </van-field>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountA}}</span> OSK-TRX LP可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'PLEDGE'"><span>{{singleTotalAmount}}</span> OSK-TRX LP可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountA}}</span> OSK-TRX LP可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'REDEEM'"><span>{{singleAmount}}</span> OSK-TRX LP可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'HARVEST'"><span>{{singleUserIncome}}</span> OSK-TRX LP可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'HARVEST'"><span>{{doubleUserIncome}}</span> OSK-TRX LP可用</div>
+
+        <van-field v-model="doubleIncomeAmount" v-if="pledgeType === 'GAFP+OLPP' && operType === 'HARVEST'" class="popup-form-item" type="number" :placeholder="`请输入收获OPLC数量`" />
+         <div class="popup-footer">
+            <div class="popup-footer-btn border-btn" @click="onHidePopup">取消</div>
+            <div class="sizedbox-width-100"></div>
+            <div class="popup-footer-btn" @click="onConfirm">确认{{OperTypeText[operType]}}</div>
+         </div>
+         
       </div>
   </van-popup>
 </template>
@@ -91,7 +114,7 @@
 <script lang='ts'>
 import { useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
-import { Toast, Popup,Field } from 'vant';
+import { Toast, Popup,Field,Button } from 'vant';
 import Decimal from 'decimal.js';
 import { pow } from '@/constants/index';
 import { useGlobalHooks } from '@/hooks';
@@ -103,7 +126,8 @@ export default {
     name: 'select_page',
     components: {
       [Popup.name]: Popup,
-      [Field.name]: Field
+      [Field.name]: Field,
+      [Button.name]: Button
     },
     setup() {
       type TPledgeType = "GAFP" | "OLPP" | "GAFP+OLPP";
@@ -125,11 +149,14 @@ export default {
       const needDoubleApprove = ref<boolean>(false);
 
       /** 数据展示 */
-      const singleUserIncome = ref<number>();  // 单币矿池收益
-      const doubleUserIncome = ref<number>();  // 双币矿池收益
-      const doubleAmountA = ref<number>();     // 双币矿池GAFP质押数量
-      const doubleAmountB = ref<number>();     // 双币矿池OLPP质押数量
-      const singleAmount = ref<number>();      // 单币质押数量
+      const singleUserIncome = ref<number>(0);  // 单币矿池收益
+      const doubleUserIncome = ref<number>(0);  // 双币矿池收益
+      const doubleAmountA = ref<number>(0);     // 双币矿池GAFP质押数量
+      const doubleAmountB = ref<number>(0);     // 双币矿池OLPP质押数量
+      const singleAmount = ref<number>(0);      // 单币质押数量
+      const singleTotalAmount = ref<number>(0); // 单币可质押数量
+      const multiTotalAmountA = ref<number>(0); // 双币GAFP可质押数量
+      const multiTotalAmountB = ref<number>(0); // 双币GAFP可质押数量
       
       /** 表单字段 */
       const olppAmount = ref<string>('');
@@ -144,6 +171,45 @@ export default {
         pledgeType.value = type;
         visible.value = true;
         operType.value = oper;
+        onSetAll();
+      }
+
+      const onSetAll = () => {
+        if(pledgeType.value === "GAFP" && operType.value === "PLEDGE") {
+           gafpAmount.value = singleTotalAmount.value.toString();
+        }
+        if(pledgeType.value  === "OLPP" && operType.value === "PLEDGE") {
+          olppAmount.value = singleTotalAmount.value.toString();
+        }
+        if(pledgeType.value  === "GAFP+OLPP" && operType.value === "PLEDGE") {
+            gafpAmount.value = multiTotalAmountA.value.toString();
+            olppAmount.value = multiTotalAmountB.value.toString();
+        }
+
+        if(pledgeType.value  === "GAFP" && operType.value === "HARVEST") {
+           gafpAmount.value = singleUserIncome.value.toString();
+        }
+        if(pledgeType.value  === "OLPP" && operType.value === "HARVEST") {
+           olppAmount.value = singleUserIncome.value.toString();
+        }
+        if(pledgeType.value  === "GAFP+OLPP" && operType.value === "HARVEST") {
+          doubleIncomeAmount.value = doubleUserIncome.value.toString();
+        }
+
+        if(pledgeType.value  === "GAFP" && operType.value === "REDEEM") {
+           gafpAmount.value = singleAmount.value.toString();
+        }
+        if(pledgeType.value  === "OLPP" && operType.value === "REDEEM") {
+           olppAmount.value = singleAmount.value.toString();
+        }
+        if(pledgeType.value  === "GAFP+OLPP" && operType.value === "REDEEM") {
+          gafpAmount.value = doubleAmountA.value.toString();
+          olppAmount.value = doubleAmountB.value.toString();
+        }
+      }
+
+      const onHidePopup = () => {
+        visible.value = false;
       }
 
       onMounted(async () => {
@@ -168,10 +234,12 @@ export default {
           if (res1 || res2) {
             onGetUserIncome();
             onGetSingleUserStakeAsset();
+            onGetSingleTotalAmount();
           }
           if (res3 && res4) {
             onGetDoubleUserIncome();
             onGetUserStakeAsset();
+            onGetMultiTotalAmount()
           }
           utils.loadingClean();
          } catch(err) {
@@ -215,7 +283,7 @@ export default {
             const res = await singlePie.userIncome();
             const income:number = (window as any).tronWeb.toDecimal(res.income);
             console.log(Number(new Decimal(income).div(pow)),income)
-            singleUserIncome.value = Number(new Decimal(income).div(pow))
+            singleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4); 
          } catch(err) {
            utils.toast(err || err.message);
            utils.loadingClean();
@@ -227,7 +295,7 @@ export default {
           try {
             const res = await multiPie.userIncome();
             const income:number = (window as any).tronWeb.toDecimal(res.income);
-            doubleUserIncome.value = Number(new Decimal(income).div(pow));
+            doubleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4);
           } catch(err) {
            utils.toast(err || err.message);
            utils.loadingClean();
@@ -241,8 +309,8 @@ export default {
             console.log(res);
             const amountA:number = (window as any).tronWeb.toDecimal(res.amountA);
             const amountB:number = (window as any).tronWeb.toDecimal(res.amountB);
-            doubleAmountA.value =  Number(new Decimal(amountA).div(pow));
-            doubleAmountB.value = Number(new Decimal(amountB).div(pow));
+            doubleAmountA.value = utils.toFixed(Number(new Decimal(amountA).div(pow)), 4) ;
+            doubleAmountB.value = utils.toFixed(Number(new Decimal(amountB).div(pow)), 4);
           } catch(err) {
            utils.toast(err || err.message);
            utils.loadingClean();
@@ -254,7 +322,35 @@ export default {
           try {
             const res = await singlePie.getUserStakeAsset();
             const amount:number = (window as any).tronWeb.toDecimal(res.amount)
-            singleAmount.value = Number(new Decimal(amount).div(pow));
+            singleAmount.value =utils.toFixed( Number(new Decimal(amount).div(pow)), 4);
+          } catch(err) {
+           utils.toast(err || err.message);
+           utils.loadingClean();
+          }
+      }
+
+      /** 获取单币可质押数量 */
+      const onGetSingleTotalAmount = async () => {
+          try {
+            const res = await singlePie.getUserWalletAsset(tokenAddress.GAFP);
+            console.log(res);
+            const amount:number = (window as any).tronWeb.toDecimal(res.amount)
+            singleTotalAmount.value =utils.toFixed(Number(new Decimal(amount).div(pow)), 4);
+          } catch(err) {
+           utils.toast(err || err.message);
+           utils.loadingClean();
+          }
+      }
+
+      /** 获取双币可质押数量 */
+      const onGetMultiTotalAmount = async () => {
+          try {
+            const [resA, resB] = await Promise.all([multiPie.getUserWalletAsset(tokenAddress.GAFP), 
+            multiPie.getUserWalletAsset(tokenAddress.OLPP)]);
+            const amountA:number = (window as any).tronWeb.toDecimal(resA.amount);
+            const amountB:number = (window as any).tronWeb.toDecimal(resB.amount);
+            multiTotalAmountA.value = utils.toFixed(Number(new Decimal(amountA).div(pow)), 4) ;
+            multiTotalAmountB.value = utils.toFixed(Number(new Decimal(amountB).div(pow)), 4);
           } catch(err) {
            utils.toast(err || err.message);
            utils.loadingClean();
@@ -439,13 +535,18 @@ export default {
         OperTypeText,
         operType,
         wellet_address,
+        singleTotalAmount,
+        multiTotalAmountA,
+        multiTotalAmountB,
         onGetWellet,
+        onHidePopup,
         onConfirm,
         onApprove,
         onApproveDuoble, 
         onRouter,
         onShowPopup,
-        onPopupClose
+        onPopupClose,
+        onSetAll
       } 
     }
   };
