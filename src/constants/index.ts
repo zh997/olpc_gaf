@@ -1,1 +1,1 @@
-export const pow = Math.pow(10,18);  // 精度
+export const pow = Math.pow(10, 6);  // 精度

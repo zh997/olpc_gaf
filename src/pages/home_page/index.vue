@@ -61,13 +61,14 @@
     </div>
      <div class="olpcgaf-homepage-address">
         <div class="olpcgaf-homepage-address-title">OLPC Token  地址：</div>
-        <div class="olpcgaf-homepage-address-content">gsdghaiughjkahglasgkaglagdfssfs</div>
+        <div class="olpcgaf-homepage-address-content">{{tokenAddress.OLPC}}</div>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
 import { useRouter } from 'vue-router';
+import { tokenAddress } from '@/tronlink/index';
 import { useGlobalHooks } from '@/hooks';
 import * as routerPaths from '@/constants/app_routes_path';
 export default {
@@ -81,7 +82,7 @@ export default {
       const onOpenWemmet = () => {
         window.location.href = 'wemeet://'
       }
-      return {routerPaths,wellet_address, onRouter, onGetWellet, onOpenWemmet} 
+      return {routerPaths,wellet_address, tokenAddress, onRouter, onGetWellet, onOpenWemmet} 
     }
   };
 </script>

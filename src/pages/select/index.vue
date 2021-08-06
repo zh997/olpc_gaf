@@ -1,106 +1,115 @@
 <!-- 首页 -->
 <template>
-  <div class="olpcgaf-homepage">
-    <div class="olpcgaf-homepage-header">
-     <img src="../../assets/3.png" class="olpcgaf-homepage-header-logo" alt="">
-     <div class="olpcgaf-homepage-header-btn" @click="onGetWellet" v-if="!wellet_address">
+  <div class="olpcgaf-select">
+    <div class="olpcgaf-select-header">
+     <img src="../../assets/3.png" class="olpcgaf-select-header-logo" alt="">
+     <div class="olpcgaf-select-header-btn" @click="onGetWellet" v-if="!wellet_address">
        我的钱包
      </div>
-     <div class="olpcgaf-homepage-header-address" v-else>
+     <div class="olpcgaf-select-header-address" v-else>
        {{wellet_address}}
      </div>
     </div>
-    <div class="olpcgaf-homepage-largelogo">
+    <div class="olpcgaf-select-largelogo">
       <img src="../../assets/3.png" alt="">
     </div>
-    <p class="olpcgaf-homepage-largetext">OLPC-TRX LP</p>
-    <p class="olpcgaf-homepage-text">质押OLPC/TRX LP获取更多OLPC</p>
+    <p class="olpcgaf-select-largetext">OLPC-TRX LP</p>
+    <p class="olpcgaf-select-text">质押OLPC/TRX LP获取更多OLPC</p>
     <div class="sizedbox-height-80"></div>
-    <div class="olpcgaf-homepage-shadowcard">
-        <div class="olpcgaf-homepage-shadowcard-logos">
-           <img src="../../assets/gary_logo_1@2x.png" class="olpcgaf-homepage-shadowcard-logo" alt="">
+    <div class="olpcgaf-select-shadowcard">
+        <div class="olpcgaf-select-shadowcard-logos">
+           <img src="../../assets/gary_logo_1@2x.png" class="olpcgaf-select-shadowcard-logo" alt="">
         </div>
       
-       <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needGafpApprove">
-          <!-- <div class="olpcgaf-homepage-shadowcard-title-label">收益</div> -->
-          <div class="olpcgaf-homepage-shadowcard-title-value">{{singleUserIncome}}</div>
+       <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needGafpApprove">
+          <!-- <div class="olpcgaf-select-shadowcard-title-label">收益</div> -->
+          <div class="olpcgaf-select-shadowcard-title-value">{{singleUserIncome}}</div>
        </div>
-        <!-- <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needGafpApprove">
-          <div class="olpcgaf-homepage-shadowcard-title-label">数量</div>
-          <div class="olpcgaf-homepage-shadowcard-title-value">{{singleAmount}}</div>
+        <!-- <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needGafpApprove">
+          <div class="olpcgaf-select-shadowcard-title-label">数量</div>
+          <div class="olpcgaf-select-shadowcard-title-value">{{singleAmount}}</div>
        </div> -->
-       <p class="olpcgaf-homepage-shadowcard-text" v-if="!needGafpApprove">待授权</p>
-       <div class="olpcgaf-homepage-shadowcard-btn" @click="onApprove(pieAddress.single,tokenAddress.GAFP)" v-if="!needGafpApprove">授权</div>
-       <div class="olpcgaf-homepage-shadowcard-btn" v-if="needGafpApprove" @click="onShowPopup('GAFP', 'PLEDGE')">质押</div>
-       <div class="olpcgaf-homepage-shadowcard-btn" v-if="needGafpApprove && singleUserIncome > 0" @click="onShowPopup('GAFP', 'HARVEST')">收获</div>
-       <div class="olpcgaf-homepage-shadowcard-btn" v-if="needGafpApprove && singleAmount > 0" @click="onShowPopup('GAFP', 'REDEEM')">赎回</div>
+       <p class="olpcgaf-select-shadowcard-text" v-if="!needGafpApprove">待授权</p>
+        <p class="olpcgaf-select-shadowcard-text" v-if="needGafpApprove">待收获 OLPC</p>
+       <div class="olpcgaf-select-shadowcard-btn" @click="onApprove(pieAddress.single,tokenAddress.GAFP)" v-if="!needGafpApprove">授权</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needGafpApprove" @click="onShowPopup('GAFP', 'PLEDGE')">质押</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needGafpApprove" @click="onShowPopup('GAFP', 'HARVEST')">收获</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needGafpApprove" @click="onShowPopup('GAFP', 'REDEEM')">赎回</div>
     </div>
-    <div class="olpcgaf-homepage-shadowcard">
-      <div class="olpcgaf-homepage-shadowcard-logos">
-         <img src="../../assets/4.png" class="olpcgaf-homepage-shadowcard-logo" alt=""> 
+    <div class="olpcgaf-select-shadowcard">
+      <div class="olpcgaf-select-shadowcard-logos">
+         <img src="../../assets/4.png" class="olpcgaf-select-shadowcard-logo" alt=""> 
          <span>+</span> 
-         <img src="../../assets/gary_logo_1@2x.png" class="olpcgaf-homepage-shadowcard-logo" alt=""> 
+         <img src="../../assets/gary_logo_1@2x.png" class="olpcgaf-select-shadowcard-logo" alt=""> 
       </div>
-       <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needDoubleApprove">
-          <!-- <div class="olpcgaf-homepage-shadowcard-title-label">收益</div> -->
-          <div class="olpcgaf-homepage-shadowcard-title-value">{{doubleUserIncome}}</div>
+       <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needDoubleApprove">
+          <!-- <div class="olpcgaf-select-shadowcard-title-label">收益</div> -->
+          <div class="olpcgaf-select-shadowcard-title-value">{{doubleUserIncome}}</div>
        </div>
-        <!-- <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needDoubleApprove">
-          <div class="olpcgaf-homepage-shadowcard-title-label">GAF 数量</div>
-          <div class="olpcgaf-homepage-shadowcard-title-value">{{doubleAmountA}}</div>
+        <!-- <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needDoubleApprove">
+          <div class="olpcgaf-select-shadowcard-title-label">GAF 数量</div>
+          <div class="olpcgaf-select-shadowcard-title-value">{{doubleAmountA}}</div>
        </div>
-        <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needDoubleApprove">
-          <div class="olpcgaf-homepage-shadowcard-title-label">OLPP 数量</div>
-          <div class="olpcgaf-homepage-shadowcard-title-value">{{doubleAmountB}}</div>
+        <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needDoubleApprove">
+          <div class="olpcgaf-select-shadowcard-title-label">OLPP 数量</div>
+          <div class="olpcgaf-select-shadowcard-title-value">{{doubleAmountB}}</div>
        </div> -->
-       <p class="olpcgaf-homepage-shadowcard-text" v-if="!needDoubleApprove">待授权</p>
-       <div class="olpcgaf-homepage-shadowcard-btn" @click="onApproveDuoble" v-if="!needDoubleApprove">授权</div>
-       <div class="olpcgaf-homepage-shadowcard-btn" v-if="needDoubleApprove" @click="onShowPopup('GAFP+OLPP','PLEDGE')">质押</div>
-       <div class="olpcgaf-homepage-shadowcard-btn" v-if="needDoubleApprove && doubleUserIncome > 0" @click="onShowPopup('GAFP+OLPP','HARVEST')">收获</div>
-       <div class="olpcgaf-homepage-shadowcard-btn" v-if="needDoubleApprove && doubleAmountA > 0 && doubleAmountB > 0"  @click="onShowPopup('GAFP+OLPP','REDEEM')">赎回</div>
+       <p class="olpcgaf-select-shadowcard-text" v-if="!needDoubleApprove">待授权</p>
+        <p class="olpcgaf-select-shadowcard-text" v-if="needDoubleApprove">待收获 OLPC</p>
+       <div class="olpcgaf-select-shadowcard-btn" @click="onApproveDuoble" v-if="!needDoubleApprove">授权</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove" @click="onShowPopup('GAFP+OLPP','PLEDGE')">质押</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove" @click="onShowPopup('GAFP+OLPP','HARVEST')">收获</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove"  @click="onShowPopup('GAFP+OLPP','REDEEM')">赎回</div>
     </div>
-    <div class="olpcgaf-homepage-shadowcard">
-      <div class="olpcgaf-homepage-shadowcard-logos">
-           <img src="../../assets/4.png" class="olpcgaf-homepage-shadowcard-logo" alt="">
+    <div class="olpcgaf-select-shadowcard">
+      <div class="olpcgaf-select-shadowcard-logos">
+           <img src="../../assets/4.png" class="olpcgaf-select-shadowcard-logo" alt="">
       </div>
     
-         <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needOlpcApprove">
-          <!-- <div class="olpcgaf-homepage-shadowcard-title-label">收益</div> -->
-          <div class="olpcgaf-homepage-shadowcard-title-value">{{singleUserIncome}}</div>
+         <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needOlpcApprove">
+          <!-- <div class="olpcgaf-select-shadowcard-title-label">收益</div> -->
+          <div class="olpcgaf-select-shadowcard-title-value">{{singleUserIncome}}</div>
        </div>
-        <!-- <div  class="olpcgaf-homepage-shadowcard-title-wrap" v-if="needOlpcApprove">
-          <div class="olpcgaf-homepage-shadowcard-title-label">数量</div>
-          <div class="olpcgaf-homepage-shadowcard-title-value">{{singleAmount}}</div>
+        <!-- <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needOlpcApprove">
+          <div class="olpcgaf-select-shadowcard-title-label">数量</div>
+          <div class="olpcgaf-select-shadowcard-title-value">{{singleAmount}}</div>
        </div> -->
-        <p class="olpcgaf-homepage-shadowcard-text" v-if="!needOlpcApprove">待授权</p>
-       <div class="olpcgaf-homepage-shadowcard-btn"  @click="onApprove(pieAddress.single,tokenAddress.OLPP)" v-if="!needOlpcApprove">授权</div>
-       <div class="olpcgaf-homepage-shadowcard-btn" v-if="needOlpcApprove && singleUserIncome > 0"  @click="onShowPopup('OLPP', 'PLEDGE')">质押</div>
-       <div class="olpcgaf-homepage-shadowcard-btn" v-if="needOlpcApprove && singleAmount > 0"  @click="onShowPopup('OLPP', 'REDEEM')">收获</div>
+        <p class="olpcgaf-select-shadowcard-text" v-if="!needOlpcApprove">待授权</p>
+         <p class="olpcgaf-select-shadowcard-text" v-if="needOlpcApprove">待收获 OLPC</p>
+       <div class="olpcgaf-select-shadowcard-btn"  @click="onApprove(pieAddress.single,tokenAddress.OLPP)" v-if="!needOlpcApprove">授权</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPP', 'PLEDGE')">质押</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPP', 'HARVEST')">收获</div>
+        <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPP', 'REDEEM')">赎回</div>
     </div>
   </div>
   <van-popup v-model:show="visible" @close="onPopupClose" position="bottom">
       <div class="popup-form-wrap">
-        <div class="popup-form-title">{{OperTypeText[operType]}}OSK-TRX LP</div>
-        <van-field v-model="olppAmount" v-if="pledgeType === 'OLPP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType !== 'HARVEST' ? 'OLPC' :'OLPP'} ${OperTypeText[operType]}数量`">
+        <div class="popup-form-title">{{OperTypeText[operType]}} {{operType !== 'HARVEST' ? 'OSK-TRX ' + pledgeType : 'OLPC'}}</div>
+        <van-field v-model="olppAmount" v-if="pledgeType === 'OLPP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'OLPP'} ${OperTypeText[operType]}数量`">
           <template #button>
-            <div class="popup-form-item-unit">OSK-TRX LP <span @click="onSetAll">全部</span></div>
+            <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">OSK-TRX OLPP <span @click="onSetAll">最大</span></div>
+            <div class="popup-form-item-unit" v-else>OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountB}}</span> OSK-TRX LP可用</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> OSK-TRX LP可用</div>
-        <van-field v-model="gafpAmount" v-if="pledgeType === 'GAFP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType !== 'HARVEST' ? 'OLPC' :'GAFP'} ${OperTypeText[operType]}数量`" >
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountB}}</span> OSK-TRX OLPP可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> OSK-TRX OLPP可用</div>
+        <van-field v-model="gafpAmount" v-if="pledgeType === 'GAFP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'GAFP'} ${OperTypeText[operType]}数量`" >
           <template #button>
-            <div class="popup-form-item-unit">OSK-TRX LP <span @click="onSetAll">全部</span></div>
+            <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">OSK-TRX GAFP <span @click="onSetAll">最大</span></div>
+            <div class="popup-form-item-unit" v-else>OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountA}}</span> OSK-TRX LP可用</div>
-        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'PLEDGE'"><span>{{singleTotalAmount}}</span> OSK-TRX LP可用</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountA}}</span> OSK-TRX LP可用</div>
-        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'REDEEM'"><span>{{singleAmount}}</span> OSK-TRX LP可用</div>
-        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'HARVEST'"><span>{{singleUserIncome}}</span> OSK-TRX LP可用</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'HARVEST'"><span>{{doubleUserIncome}}</span> OSK-TRX LP可用</div>
-
-        <van-field v-model="doubleIncomeAmount" v-if="pledgeType === 'GAFP+OLPP' && operType === 'HARVEST'" class="popup-form-item" type="number" :placeholder="`请输入收获OPLC数量`" />
+         <van-field v-model="doubleIncomeAmount" v-if="pledgeType === 'GAFP+OLPP' && operType === 'HARVEST'" class="popup-form-item" type="number" :placeholder="`请输入OLPC ${OperTypeText[operType]}数量`" >
+          <template #button>
+            <div class="popup-form-item-unit">OLPC <span @click="onSetAll">最大</span></div>
+          </template>
+        </van-field>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountA}}</span> OSK-TRX GAFP可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'PLEDGE'"><span>{{singleTotalAmount}}</span> OSK-TRX {{pledgeType}}可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountA}}</span> OSK-TRX GAFP可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'REDEEM'"><span>{{singleAmount}}</span> OSK-TRX {{pledgeType}}可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'HARVEST'"><span>{{singleUserIncome}}</span> OLPC可收获</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'HARVEST'"><span>{{doubleUserIncome}}</span> OLPC可收获</div>
          <div class="popup-footer">
             <div class="popup-footer-btn border-btn" @click="onHidePopup">取消</div>
             <div class="sizedbox-width-100"></div>
@@ -366,12 +375,12 @@ export default {
               return utils.toast(`请输入OLPP${OperTypeText[operType.value]}数量`)
           }
       
-          if (!/[0-9]*[1-9][0-9]*$/.test(olppAmount.value.toString()) && (pledgeType.value === "OLPP" || pledgeType.value === "GAFP+OLPP")) {
-            return utils.toast(`请输入正整数OLPP${OperTypeText[operType.value]}数量`)
-          }
-          if (!/[0-9]*[1-9][0-9]*$/.test(gafpAmount.value.toString()) && (pledgeType.value === "GAFP" || pledgeType.value === "GAFP+OLPP")) {
-            return utils.toast(`请输入正整数GAFP${OperTypeText[operType.value]}数量`)
-          }
+          // if (!/[0-9]*[1-9][0-9]*$/.test(olppAmount.value.toString()) && (pledgeType.value === "OLPP" || pledgeType.value === "GAFP+OLPP")) {
+          //   return utils.toast(`请输入正整数OLPP${OperTypeText[operType.value]}数量`)
+          // }
+          // if (!/[0-9]*[1-9][0-9]*$/.test(gafpAmount.value.toString()) && (pledgeType.value === "GAFP" || pledgeType.value === "GAFP+OLPP")) {
+          //   return utils.toast(`请输入正整数GAFP${OperTypeText[operType.value]}数量`)
+          // }
           /** 质押 */
           if (operType.value === "PLEDGE") {
               onPledge(); 
