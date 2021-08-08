@@ -18,10 +18,10 @@
     <div class="sizedbox-height-80"></div>
     <div class="olpcgaf-homepage-card">
        <div class="olpcgaf-homepage-card-title">OLPC总供应量</div>
-       <div class="olpcgaf-homepage-card-price">10,000,000</div>
+       <div class="olpcgaf-homepage-card-price">100,000,000 </div>
        <div class="olpcgaf-homepage-card-footer">
          <span>最大总供应量</span>
-         <span>10,000,000  OLPC</span>
+         <span>100,000,000  OLPC</span>
         </div>
     </div>
     <div class="olpcgaf-homepage-card">
@@ -34,13 +34,13 @@
           <img src="../../assets/LOGO@3x.png" class="olpcgaf-homepage-darkcard-logo" alt="">
           <div class="olpcgaf-homepage-darkcard-content">
             <div class="olpcgaf-homepage-text text-left">我们为您提供10%的OLPC推荐奖励。复制下面的推荐链接立即分享并获得奖励。</div>
-            <div class="recomend-link">gfasgfjahflafasgfjahflafasgfjahflafa</div>
-            <div class="olpcgaf-homepage-darkcard-btn">复制推荐链接</div>
+            <input class="recomend-link" placeholder="请输入钱包地址" id="copy"/>
+            <div class="olpcgaf-homepage-darkcard-btn" data-clipboard-target="#copy">复制</div>
           </div>
        </div>
        <div class="olpcgaf-homepage-darkcard-footer">
          <span>最大总供应量</span>
-         <span>10,000,000  OLPC</span>
+         <span>100,000,000   OLPC</span>
        </div>
     </div>
     <div class="olpcgaf-homepage-shadowcard">
@@ -49,7 +49,7 @@
        <p class="olpcgaf-homepage-text">质押OLPC-TRX LP</p>
        <p class="olpcgaf-homepage-text">赚取10000000 OLPC</p>
        <p class="olpcgaf-homepage-link">查看合约</p>
-       <p class="olpcgaf-homepage-shadowcard-text">0.00000 OLPC准备收获</p>
+       <p class="olpcgaf-homepage-shadowcard-text">{{allIcomeAmount}} OLPC准备收获</p>
        <div class="olpcgaf-homepage-shadowcard-btn" @click="onRouter(routerPaths.select_page)">选择</div>
     </div>
     <div class="olpcgaf-homepage-tencentlogo">
@@ -68,20 +68,81 @@
 
 <script lang='ts'>
 import { useRouter } from 'vue-router';
+import Decimal from 'decimal.js';
+import { Toast } from 'vant';
+import ClipboardJS from 'clipboard';
+import { pow } from '@/constants/index';
+import * as utils from '@/utils/index';
 import { useGlobalHooks } from '@/hooks';
 import * as routerPaths from '@/constants/app_routes_path';
+import { tokenContract, SinglePie, MultiPie } from '@/tronlink/index';
+import { onMounted,ref, computed } from 'vue';
 export default {
     name: 'home_page',
     setup() {
       const { wellet_address, onGetWellet } = useGlobalHooks();
+      const singleUserIncome = ref<number>(0);  // 单币矿池收益
+      const doubleUserIncome = ref<number>(0);  // 双币矿池收益
       const router = useRouter();
+      const contract = new tokenContract();
+      const singlePie = new SinglePie();
+      const multiPie = new MultiPie();
       const onRouter = (path: string) => {
         router.push(path)
       }
       const onOpenWemmet = () => {
         window.location.href = 'wemeet://'
       }
-      return {routerPaths,wellet_address, onRouter, onGetWellet, onOpenWemmet} 
+       /** 获取单币用户收益 */
+      const onGetUserIncome = async () => {
+          try {
+            const res = await singlePie.userIncome();
+            const income:number = (window as any).tronWeb.toDecimal(res.income);
+            console.log(Number(new Decimal(income).div(pow)),income)
+            singleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4); 
+         } catch(err) {
+           utils.toast(err || err.message);
+           utils.loadingClean();
+         }
+      }
+
+      /** 获取双币用户收益 */
+      const onGetDoubleUserIncome = async () => {
+          try {
+            const res = await multiPie.userIncome();
+            const income:number = (window as any).tronWeb.toDecimal(res.income);
+            doubleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4);
+          } catch(err) {
+           utils.toast(err || err.message);
+           utils.loadingClean();
+          }
+      }
+
+      const allIcomeAmount = computed({
+            get: () => {
+                const a = new Decimal(Number(singleUserIncome.value));
+                const b = new Decimal(Number(doubleUserIncome.value));
+                return utils.toFixed(Number(a.add(b)), 4);
+            },
+            set: () => {
+
+            }
+        })
+      
+
+      onMounted(() => {
+        onGetUserIncome();
+        onGetDoubleUserIncome();
+        let ClipboardJSObj=new ClipboardJS('.olpcgaf-homepage-darkcard-btn')
+            ClipboardJSObj.on('success', function(e) {
+                Toast.success('复制成功')
+                e.clearSelection();
+            });
+            ClipboardJSObj.on('error', function(e) {
+                e.clearSelection();
+            })
+      })
+      return {routerPaths,wellet_address, onRouter, onGetWellet, onOpenWemmet, allIcomeAmount} 
     }
   };
 </script>

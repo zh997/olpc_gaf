@@ -5,7 +5,7 @@ const ITRC20 = require('./ITRC20.json');
 /** 代币地址 */
 export const tokenAddress = {
     OLPC: 'TA15uPAzkwbXUtzK8cUvrLKUjcjiEY99RS',
-    GAFP: 'TB2sHydUmp31vEiQyfRxxnA3dbd4CreCUz',
+    GAFP: 'TVbRqw2oZTyD8sPojc9Gjb4q5aGR125hgx',
     OLPP: 'TANvziYPGfYkY1nfuXgH2tTTq4ZmzZ8mcT'
 }
 
@@ -26,7 +26,7 @@ export const tronWebApprove = (token, address) => {
             try {
                 /** 授权数量 直接授权å一个亿 第二次投资的时候 可以查询授权数量还有 就不用再次授权 */
                 const amount = 100000000 * Math.pow(10, 18);
-                const contract = await window.tronWeb.contract(ITRC20.abi).at(token);
+                const contract = await window.tronWeb.contract(ITRC20.abi, token);
                 const res = await contract.approve(address, window.tronWeb.toHex(amount)).send();
                 resolve(res);
             } catch (err) {
@@ -36,6 +36,25 @@ export const tronWebApprove = (token, address) => {
         })();
     })
 }
+
+/** 初始化代币实例 */
+export const initTokenContract = () => {
+    return new Promise((resolve, reject) => {
+        (async() => {
+            try {
+                /** 授权数量 直接授权å一个亿 第二次投资的时候 可以查询授权数量还有 就不用再次授权 */
+                const amount = 100000000 * Math.pow(10, 18);
+                const contract = await window.tronWeb.contract(ITRC20.abi, tokenAddress.GAFP);
+                window.contract = contract;
+                resolve(contract);
+            } catch (err) {
+                console.log(err);
+                reject(err);
+            }
+        })();
+    })
+}
+
 
 
 /**
@@ -57,6 +76,13 @@ export const initContract = () => {
             }
         })();
     })
+}
+
+export class tokenContract {
+    /** 获取总供应量 */
+    totalSupply() {
+        return window.contract.totalSupply();
+    }
 }
 
 export class SinglePie {
@@ -96,6 +122,10 @@ export class SinglePie {
         /** 获取用户是否需要对当前币种进行授权 */
     getTokenAllownceAmount(token) {
         return window.singlePieContract.getTokenAllownceAmount(this.wellet_address, token).call();
+    }
+
+    totalSupply() {
+        return window.singlePieContract.totalSupply().call();
     }
 
 }
@@ -144,6 +174,10 @@ export class MultiPie {
         /** 用户提取挖矿收益 */
     claim(amount) {
         return window.multiPieContract.claim(this.wellet_address, window.tronWeb.toHex(amount)).call();
+    }
+
+    totalSupply() {
+        return window.singlePieContract.totalSupply().call();
     }
 
 }
