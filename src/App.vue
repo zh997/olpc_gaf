@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { onMounted, ref } from 'vue';
-import { getTronlinkAddress, initContract } from '@/tronlink/index';
+import { getTronlinkAddress, initContract, initRewardContract, initOlptContract } from '@/tronlink/index';
 // import * as services from '@/services'; 
 import * as utils from '@/utils/index';
 
@@ -22,6 +22,8 @@ export default {
         utils.loading('初始化');
         await getTronlinkAddress();
         await initContract();
+        await initOlptContract();
+        await initRewardContract();
         utils.loadingClean();
         isShowRouter.value = true;
         console.log((window as any).tronWeb);
