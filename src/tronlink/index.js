@@ -35,7 +35,7 @@ export const tronWebApprove = (token, address) => {
         (async() => {
             try {
                 /** 授权数量 直接授权å一个亿 第二次投资的时候 可以查询授权数量还有 就不用再次授权 */
-                const amount = 100000000 * pow;
+                const amount = 1000000000000000000000000000000000000000000000000000000 * pow;
                 const contract = await window.tronWeb.contract(ITRC20.abi, token);
                 const res = await contract.approve(address, window.tronWeb.toHex(amount)).send();
                 resolve(res);
