@@ -51,15 +51,15 @@
           <div class="olpcgaf-select-shadowcard-title-value">{{doubleAmountA}}</div>
        </div>
         <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needDoubleApprove">
-          <div class="olpcgaf-select-shadowcard-title-label">OLPP 数量</div>
+          <div class="olpcgaf-select-shadowcard-title-label">OLPC 数量</div>
           <div class="olpcgaf-select-shadowcard-title-value">{{doubleAmountB}}</div>
        </div> -->
        <p class="olpcgaf-select-shadowcard-text" v-if="!needDoubleApprove">待授权</p>
         <p class="olpcgaf-select-shadowcard-text" v-if="needDoubleApprove">待收获 OLPC</p>
        <div class="olpcgaf-select-shadowcard-btn" @click="onApproveDuoble" v-if="!needDoubleApprove">授权</div>
-       <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove" @click="onShowPopup('GAFP+OLPP','PLEDGE')">质押</div>
-       <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove" @click="onShowPopup('GAFP+OLPP','HARVEST')">收获</div>
-       <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove"  @click="onShowPopup('GAFP+OLPP','REDEEM')">赎回</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove" @click="onShowPopup('GAFP+OLPC','PLEDGE')">质押</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove" @click="onShowPopup('GAFP+OLPC','HARVEST')">收获</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove"  @click="onShowPopup('GAFP+OLPC','REDEEM')">赎回</div>
     </div>
     <div class="olpcgaf-select-shadowcard">
       <div class="olpcgaf-select-shadowcard-logos">
@@ -68,48 +68,49 @@
     
          <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needOlpcApprove">
           <!-- <div class="olpcgaf-select-shadowcard-title-label">收益</div> -->
-          <div class="olpcgaf-select-shadowcard-title-value">{{singleUserIncome}}</div>
+          <div class="olpcgaf-select-shadowcard-title-value">{{recommedUserIncome}}</div>
        </div>
         <!-- <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needOlpcApprove">
           <div class="olpcgaf-select-shadowcard-title-label">数量</div>
           <div class="olpcgaf-select-shadowcard-title-value">{{singleAmount}}</div>
        </div> -->
         <p class="olpcgaf-select-shadowcard-text" v-if="!needOlpcApprove">待授权</p>
-         <p class="olpcgaf-select-shadowcard-text" v-if="needOlpcApprove">待收获 OLPC</p>
-       <div class="olpcgaf-select-shadowcard-btn"  @click="onApprove(pieAddress.single,tokenAddress.OLPP)" v-if="!needOlpcApprove">授权</div>
-       <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPP', 'PLEDGE')">质押</div>
-       <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPP', 'HARVEST')">收获</div>
-        <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPP', 'REDEEM')">赎回</div>
+         <p class="olpcgaf-select-shadowcard-text" v-if="needOlpcApprove">推荐收益 OLPC</p>
+       <div class="olpcgaf-select-shadowcard-btn"  @click="onApprove(pieAddress.single,tokenAddress.OLPC)" v-if="!needOlpcApprove">授权</div>
+       <!-- <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'PLEDGE')">质押</div> -->
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'HARVEST')">收获</div>
+        <!-- <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'REDEEM')">赎回</div> -->
+        <p class="olpcgaf-select-shadowcard-text" v-if="needOlpcApprove">推荐算力: {{ability}}</p>
     </div>
   </div>
   <van-popup v-model:show="visible" @close="onPopupClose" position="bottom">
       <div class="popup-form-wrap">
-        <div class="popup-form-title">{{OperTypeText[operType]}} {{operType !== 'HARVEST' ? (pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX') + pledgeType : 'OLPC'}}</div>
-        <van-field v-model="olppAmount" v-if="pledgeType === 'OLPP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'OLPP'} ${OperTypeText[operType]}数量`">
+        <div class="popup-form-title">{{OperTypeText[operType]}} {{operType !== 'HARVEST' ? (pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX ') + pledgeType : 'OLPC'}}</div>
+        <van-field v-model="OLPCAmount" v-if="pledgeType === 'OLPC' || (pledgeType === 'GAFP+OLPC' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'OLPC'} ${OperTypeText[operType]}数量`">
           <template #button>
             <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">OLPC-TRX OLPC <span @click="onSetAll">最大</span></div>
             <div class="popup-form-item-unit" v-else>OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountB}}</span> OLPC-TRX OLPC可用</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> OLPC-TRX OLPC可用</div>
-        <van-field v-model="gafpAmount" v-if="pledgeType === 'GAFP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'GAFP'} ${OperTypeText[operType]}数量`" >
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'PLEDGE'"><span>{{multiTotalAmountB}}</span> OLPC-TRX OLPC可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> OLPC-TRX OLPC可用</div>
+        <van-field v-model="gafpAmount" v-if="pledgeType === 'GAFP' || (pledgeType === 'GAFP+OLPC' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'GAFP'} ${OperTypeText[operType]}数量`" >
           <template #button>
             <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">GAF-TRX GAFP <span @click="onSetAll">最大</span></div>
             <div class="popup-form-item-unit" v-else>OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
-         <van-field v-model="doubleIncomeAmount" v-if="pledgeType === 'GAFP+OLPP' && operType === 'HARVEST'" class="popup-form-item" type="number" :placeholder="`请输入OLPC ${OperTypeText[operType]}数量`" >
+         <van-field v-model="doubleIncomeAmount" v-if="pledgeType === 'GAFP+OLPC' && operType === 'HARVEST'" class="popup-form-item" type="number" :placeholder="`请输入OLPC ${OperTypeText[operType]}数量`" >
           <template #button>
             <div class="popup-form-item-unit">OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountA}}</span> GAF-TRX GAFP可用</div>
-        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'PLEDGE'"><span>{{singleTotalAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountA}}</span> GAF-TRX GAFP可用</div>
-        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'REDEEM'"><span>{{singleAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
-        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'HARVEST'"><span>{{singleUserIncome}}</span> OLPC可收获</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'HARVEST'"><span>{{doubleUserIncome}}</span> OLPC可收获</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'PLEDGE'"><span>{{multiTotalAmountA}}</span> GAF-TRX GAFP可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'PLEDGE'"><span>{{singleTotalAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'REDEEM'"><span>{{doubleAmountA}}</span> GAF-TRX GAFP可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'REDEEM'"><span>{{singleAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'HARVEST'"><span>{{singleUserIncome}}</span> OLPC可收获</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'HARVEST'"><span>{{doubleUserIncome}}</span> OLPC可收获</div>
          <div class="popup-footer">
             <div class="popup-footer-btn border-btn" @click="onHidePopup">取消</div>
             <div class="sizedbox-width-100"></div>
@@ -128,7 +129,7 @@ import Decimal from 'decimal.js';
 import { pow } from '@/constants/index';
 import { useGlobalHooks } from '@/hooks';
 import * as routerPaths from '@/constants/app_routes_path';
-import {  SinglePie, tokenAddress, pieAddress, tronWebApprove, MultiPie } from '@/tronlink/index';
+import {  SinglePie, tokenAddress, pieAddress, tronWebApprove, MultiPie, RewardContract } from '@/tronlink/index';
 import * as utils from '@/utils/index';
 
 export default {
@@ -139,7 +140,7 @@ export default {
       [Button.name]: Button
     },
     setup() {
-      type TPledgeType = "GAFP" | "OLPP" | "GAFP+OLPP";
+      type TPledgeType = "GAFP" | "OLPC" | "GAFP+OLPC";
       type TOperType = "PLEDGE" | "HARVEST" | "REDEEM";
       const OperTypeText = {
          "PLEDGE": '质押',
@@ -147,8 +148,10 @@ export default {
          "REDEEM": '赎回'
       }
       const { wellet_address, onGetWellet } = useGlobalHooks();
+      
       const singlePie = new SinglePie();
       const multiPie = new MultiPie();
+      const rewardContract = new RewardContract();
       const router = useRouter();
       const visible = ref<boolean>(false);
       const pledgeType = ref<TPledgeType>("GAFP");
@@ -160,15 +163,17 @@ export default {
       /** 数据展示 */
       const singleUserIncome = ref<number>(0);  // 单币矿池收益
       const doubleUserIncome = ref<number>(0);  // 双币矿池收益
+      const recommedUserIncome = ref<number>(0);  // 用户推荐收益
       const doubleAmountA = ref<number>(0);     // 双币矿池GAFP质押数量
-      const doubleAmountB = ref<number>(0);     // 双币矿池OLPP质押数量
+      const doubleAmountB = ref<number>(0);     // 双币矿池OLPC质押数量
       const singleAmount = ref<number>(0);      // 单币质押数量
       const singleTotalAmount = ref<number>(0); // 单币可质押数量
       const multiTotalAmountA = ref<number>(0); // 双币GAFP可质押数量
       const multiTotalAmountB = ref<number>(0); // 双币GAFP可质押数量
+      const ability = ref<number>(0);          // 推荐算力
       
       /** 表单字段 */
-      const olppAmount = ref<string>('');
+      const OLPCAmount = ref<string>('');
       const gafpAmount = ref<string>('');
       const doubleIncomeAmount = ref<string>('');
     
@@ -187,33 +192,33 @@ export default {
         if(pledgeType.value === "GAFP" && operType.value === "PLEDGE") {
            gafpAmount.value = singleTotalAmount.value.toString();
         }
-        if(pledgeType.value  === "OLPP" && operType.value === "PLEDGE") {
-          olppAmount.value = singleTotalAmount.value.toString();
+        if(pledgeType.value  === "OLPC" && operType.value === "PLEDGE") {
+          OLPCAmount.value = singleTotalAmount.value.toString();
         }
-        if(pledgeType.value  === "GAFP+OLPP" && operType.value === "PLEDGE") {
+        if(pledgeType.value  === "GAFP+OLPC" && operType.value === "PLEDGE") {
             gafpAmount.value = multiTotalAmountA.value.toString();
-            olppAmount.value = multiTotalAmountB.value.toString();
+            OLPCAmount.value = multiTotalAmountB.value.toString();
         }
 
         if(pledgeType.value  === "GAFP" && operType.value === "HARVEST") {
            gafpAmount.value = singleUserIncome.value.toString();
         }
-        if(pledgeType.value  === "OLPP" && operType.value === "HARVEST") {
-           olppAmount.value = singleUserIncome.value.toString();
+        if(pledgeType.value  === "OLPC" && operType.value === "HARVEST") {
+           OLPCAmount.value = singleUserIncome.value.toString();
         }
-        if(pledgeType.value  === "GAFP+OLPP" && operType.value === "HARVEST") {
+        if(pledgeType.value  === "GAFP+OLPC" && operType.value === "HARVEST") {
           doubleIncomeAmount.value = doubleUserIncome.value.toString();
         }
 
         if(pledgeType.value  === "GAFP" && operType.value === "REDEEM") {
            gafpAmount.value = singleAmount.value.toString();
         }
-        if(pledgeType.value  === "OLPP" && operType.value === "REDEEM") {
-           olppAmount.value = singleAmount.value.toString();
+        if(pledgeType.value  === "OLPC" && operType.value === "REDEEM") {
+           OLPCAmount.value = singleAmount.value.toString();
         }
-        if(pledgeType.value  === "GAFP+OLPP" && operType.value === "REDEEM") {
+        if(pledgeType.value  === "GAFP+OLPC" && operType.value === "REDEEM") {
           gafpAmount.value = doubleAmountA.value.toString();
-          olppAmount.value = doubleAmountB.value.toString();
+          OLPCAmount.value = doubleAmountB.value.toString();
         }
       }
 
@@ -231,9 +236,9 @@ export default {
           utils.loading('正在获取数据');
           const [res1, res2, res3, res4] = await Promise.all([
             singlePie.getTokenAllownceAmount(tokenAddress.GAFP),
-            singlePie.getTokenAllownceAmount(tokenAddress.OLPP),
+            singlePie.getTokenAllownceAmount(tokenAddress.OLPC),
             multiPie.getTokenAllownceAmount(tokenAddress.GAFP),
-            multiPie.getTokenAllownceAmount(tokenAddress.OLPP)
+            multiPie.getTokenAllownceAmount(tokenAddress.OLPC)
           ]);
           console.log(res1, res2, res3, res4);
           needGafpApprove.value = res1;
@@ -244,6 +249,8 @@ export default {
             onGetUserIncome();
             onGetSingleUserStakeAsset();
             onGetSingleTotalAmount();
+            onGetRecommedUserIncome();
+            onGetUserInfo();
           }
           if (res3 && res4) {
             onGetDoubleUserIncome();
@@ -252,6 +259,7 @@ export default {
           }
           utils.loadingClean();
          } catch(err) {
+           console.log(err);
            utils.toast(err || err.message);
          }
       }
@@ -276,7 +284,7 @@ export default {
         try {
           utils.loading('授权中');
           await tronWebApprove(tokenAddress.GAFP, pieAddress.multi);
-          await tronWebApprove(tokenAddress.OLPP, pieAddress.multi);
+          await tronWebApprove(tokenAddress.OLPC, pieAddress.multi);
           Toast.success({message: '授权成功', onClose: () => {
             onGetApproveStatus();
           }});
@@ -294,8 +302,8 @@ export default {
             console.log(Number(new Decimal(income).div(pow)),income)
             singleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4); 
          } catch(err) {
+           console.log(err);
            utils.toast(err || err.message);
-           utils.loadingClean();
          }
       }
 
@@ -306,8 +314,32 @@ export default {
             const income:number = (window as any).tronWeb.toDecimal(res.income);
             doubleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4);
           } catch(err) {
+            console.log(err);
            utils.toast(err || err.message);
-           utils.loadingClean();
+          }
+      }
+
+      /** 获取用户推荐收益 */
+       const onGetRecommedUserIncome = async () => {
+          try {
+            const res = await rewardContract.userIncome();
+            const income:number = (window as any).tronWeb.toDecimal(res.income);
+            recommedUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4);
+          } catch(err) {
+            console.log(err);
+           utils.toast(err || err.message);
+          }
+      }
+
+      /** 获取用户的各项信息 */
+       const onGetUserInfo = async () => {
+          try {
+            const res = await rewardContract.getUserInfo();
+            const _ability:number = (window as any).tronWeb.toDecimal(res._ability);
+            ability.value = utils.toFixed(Number(new Decimal(_ability).div(pow)), 4);
+          } catch(err) {
+            console.log(err);
+           utils.toast(err || err.message);
           }
       }
       
@@ -320,8 +352,8 @@ export default {
             doubleAmountA.value = utils.toFixed(Number(new Decimal(amountA).div(pow)), 4) ;
             doubleAmountB.value = utils.toFixed(Number(new Decimal(amountB).div(pow)), 4);
           } catch(err) {
+            console.log(err);
            utils.toast(err || err.message);
-           utils.loadingClean();
           }
       }
 
@@ -332,8 +364,8 @@ export default {
             const amount:number = (window as any).tronWeb.toDecimal(res._stake)
             singleAmount.value =utils.toFixed( Number(new Decimal(amount).div(pow)), 4);
           } catch(err) {
+            console.log(err);
            utils.toast(err || err.message);
-           utils.loadingClean();
           }
       }
 
@@ -344,8 +376,8 @@ export default {
             const amount:number = (window as any).tronWeb.toDecimal(res)
             singleTotalAmount.value =utils.toFixed(Number(new Decimal(amount).div(pow)), 4);
           } catch(err) {
+            console.log(err);
            utils.toast(err || err.message);
-           utils.loadingClean();
           }
       }
 
@@ -353,32 +385,26 @@ export default {
       const onGetMultiTotalAmount = async () => {
           try {
             const [resA, resB] = await Promise.all([multiPie.getUserWalletAsset(tokenAddress.GAFP), 
-            multiPie.getUserWalletAsset(tokenAddress.OLPP)]);
-            const amountA:number = (window as any).tronWeb.toDecimal(resA.amount);
-            const amountB:number = (window as any).tronWeb.toDecimal(resB.amount);
+            multiPie.getUserWalletAsset(tokenAddress.OLPC)]);
+            const amountA:number = (window as any).tronWeb.toDecimal(resA);
+            const amountB:number = (window as any).tronWeb.toDecimal(resB);
             multiTotalAmountA.value = utils.toFixed(Number(new Decimal(amountA).div(pow)), 4) ;
             multiTotalAmountB.value = utils.toFixed(Number(new Decimal(amountB).div(pow)), 4);
           } catch(err) {
+            console.log(err);
            utils.toast(err || err.message);
-           utils.loadingClean();
           }
       }
       
       /** 确认 */
       const onConfirm = async () => {
-          if (!gafpAmount.value.trim() && (pledgeType.value === "GAFP" || pledgeType.value === "GAFP+OLPP")) {
+          if (!gafpAmount.value.trim() && (pledgeType.value === "GAFP" || pledgeType.value === "GAFP+OLPC")) {
               return utils.toast(`请输入GAFP${OperTypeText[operType.value]}数量`)
           }
-          if (!olppAmount.value.trim() && (pledgeType.value === "OLPP" || pledgeType.value === "GAFP+OLPP")) {
-              return utils.toast(`请输入OLPP${OperTypeText[operType.value]}数量`)
+          if (!OLPCAmount.value.trim() && (pledgeType.value === "OLPC" || pledgeType.value === "GAFP+OLPC")) {
+              return utils.toast(`请输入OLPC${OperTypeText[operType.value]}数量`)
           }
-      
-          // if (!/[0-9]*[1-9][0-9]*$/.test(olppAmount.value.toString()) && (pledgeType.value === "OLPP" || pledgeType.value === "GAFP+OLPP")) {
-          //   return utils.toast(`请输入正整数OLPP${OperTypeText[operType.value]}数量`)
-          // }
-          // if (!/[0-9]*[1-9][0-9]*$/.test(gafpAmount.value.toString()) && (pledgeType.value === "GAFP" || pledgeType.value === "GAFP+OLPP")) {
-          //   return utils.toast(`请输入正整数GAFP${OperTypeText[operType.value]}数量`)
-          // }
+
           /** 质押 */
           if (operType.value === "PLEDGE") {
               onPledge(); 
@@ -407,21 +433,21 @@ export default {
               onGetApproveStatus();
             }})
           }
-          if (pledgeType.value === "OLPP") {
+          if (pledgeType.value === "OLPC") {
             utils.loading('质押中');
-            console.log(Number(olppAmount.value) * pow)
-            const res = await singlePie.updateOneAsset(Number(olppAmount.value) * pow);
+            console.log(Number(OLPCAmount.value) * pow)
+            const res = await singlePie.updateOneAsset(Number(OLPCAmount.value) * pow);
             console.log(res);
             Toast.success({message:'质押成功', onClose: () => {
               visible.value = false;
               onGetApproveStatus();
             }})
           }
-          if (pledgeType.value === "GAFP+OLPP") {
+          if (pledgeType.value === "GAFP+OLPC") {
             utils.loading('质押中');
-            console.log(Number(olppAmount.value) * pow)
+            console.log(Number(OLPCAmount.value) * pow)
             const amountA = Number(gafpAmount.value) * pow;
-            const amountB = Number(olppAmount.value) * pow;
+            const amountB = Number(OLPCAmount.value) * pow;
             const res = await multiPie.provideTwoAsset(amountA,amountB);
             console.log(res);
             Toast.success({message:'质押成功', onClose: () => {
@@ -430,6 +456,7 @@ export default {
             }})
           }
         } catch(err) {
+          console.log(err);
           utils.toast(err || err.message);
         }
       }
@@ -447,17 +474,17 @@ export default {
               onGetApproveStatus();
             }})
           }
-          if (pledgeType.value === "OLPP") {
+          if (pledgeType.value === "OLPC") {
             utils.loading('收获中');
-            console.log(Number(olppAmount.value) * pow)
-            const res = await singlePie.claim(Number(olppAmount.value) * pow);
+            console.log(Number(OLPCAmount.value) * pow)
+            const res = await rewardContract.claim(Number(OLPCAmount.value) * pow);
             console.log(res);
             Toast.success({message:'收获成功', onClose: () => {
               visible.value = false;
               onGetApproveStatus();
             }})
           }
-          if (pledgeType.value === "GAFP+OLPP") {
+          if (pledgeType.value === "GAFP+OLPC") {
             utils.loading('收获中');
             console.log(Number(doubleIncomeAmount.value) * pow)
             const amount = Number(doubleIncomeAmount.value) * pow;
@@ -469,6 +496,7 @@ export default {
             }})
           }
         } catch(err) {
+          console.log(err);
           utils.toast(err || err.message);
         }
       }
@@ -486,22 +514,22 @@ export default {
               onGetApproveStatus();
             }})
           }
-          if (pledgeType.value === "OLPP") {
+          if (pledgeType.value === "OLPC") {
             utils.loading('赎回中');
-            console.log(Number(olppAmount.value) * pow)
-            const res = await singlePie.withdrawOneAsset(Number(olppAmount.value) * pow);
+            console.log(Number(OLPCAmount.value) * pow)
+            const res = await singlePie.withdrawOneAsset(Number(OLPCAmount.value) * pow);
             console.log(res);
             Toast.success({message:'赎回成功', onClose: () => {
               visible.value = false;
               onGetApproveStatus();
             }})
           }
-          if (pledgeType.value === "GAFP+OLPP") {
+          if (pledgeType.value === "GAFP+OLPC") {
             utils.loading('赎回中');
             console.log(Number(doubleIncomeAmount.value) * pow)
-            console.log(Number(olppAmount.value) * pow)
+            console.log(Number(OLPCAmount.value) * pow)
             const amountA = Number(gafpAmount.value) * pow;
-            const amountB = Number(olppAmount.value) * pow;
+            const amountB = Number(OLPCAmount.value) * pow;
             const res = await multiPie.withdrawTwoAsset(amountA, amountB);
             console.log(res);
             Toast.success({message:'赎回成功', onClose: () => {
@@ -510,6 +538,7 @@ export default {
             }})
           }
         } catch(err) {
+          console.log(err);
           utils.toast(err || err.message);
         }
       }
@@ -518,7 +547,7 @@ export default {
       /** 弹窗关闭，清空表单 */
       const onPopupClose = () => {
         gafpAmount.value = '';
-        olppAmount.value = '';
+        OLPCAmount.value = '';
         doubleIncomeAmount.value = '';
       }
 
@@ -535,7 +564,7 @@ export default {
         doubleAmountB,
         singleAmount,
         visible,
-        olppAmount,
+        OLPCAmount,
         gafpAmount,
         doubleIncomeAmount,
         pledgeType,
@@ -545,6 +574,8 @@ export default {
         singleTotalAmount,
         multiTotalAmountA,
         multiTotalAmountB,
+        recommedUserIncome,
+        ability,
         onGetWellet,
         onHidePopup,
         onConfirm,

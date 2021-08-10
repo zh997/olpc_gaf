@@ -9,12 +9,11 @@ const { pow } = require('@/constants/index');
 // export const tokenAddress = {
 //         OLPC: 'TA15uPAzkwbXUtzK8cUvrLKUjcjiEY99RS',
 //         GAFP: 'TVbRqw2oZTyD8sPojc9Gjb4q5aGR125hgx',
-//         OLPP: 'TANvziYPGfYkY1nfuXgH2tTTq4ZmzZ8mcT'
+//         OLPC: 'TANvziYPGfYkY1nfuXgH2tTTq4ZmzZ8mcT'
 //     }
 export const tokenAddress = {
-    OLPC: 'TA15uPAzkwbXUtzK8cUvrLKUjcjiEY99RS',
     GAFP: 'TVpN8X4FUAsDAW6J9m3c58v3dacJJgpH8N',
-    OLPP: 'TYuhhCibRSuw3mECXcLbKrLK9XnubdAX1y'
+    OLPC: 'TYuhhCibRSuw3mECXcLbKrLK9XnubdAX1y'
 }
 
 
@@ -171,10 +170,6 @@ export class SinglePie {
         /** 获取用户是否需要对当前币种进行授权 */
     getTokenAllownceAmount(token) {
         return window.singlePieContract.getTokenAllownceAmount(this.wellet_address, token).call();
-    }
-
-    totalSupply() {
-        return window.singlePieContract.totalSupply().call();
     }
 
 }
