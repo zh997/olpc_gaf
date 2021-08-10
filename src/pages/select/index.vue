@@ -92,8 +92,8 @@
             <div class="popup-form-item-unit" v-else>OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'PLEDGE'"><span>{{multiTotalAmountB}}</span> OLPC-TRX OLPC可用</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> OLPC-TRX OLPC可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'PLEDGE'"><span>{{multiTotalAmountA}}</span> OLPC-TRX OLPC可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'REDEEM'"><span>{{doubleAmountA}}</span> OLPC-TRX OLPC可用</div>
         <van-field v-model="gafpAmount" v-if="pledgeType === 'GAFP' || (pledgeType === 'GAFP+OLPC' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'GAFP'} ${OperTypeText[operType]}数量`" >
           <template #button>
             <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">GAF-TRX GAFP <span @click="onSetAll">最大</span></div>
@@ -105,9 +105,9 @@
             <div class="popup-form-item-unit">OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'PLEDGE'"><span>{{multiTotalAmountA}}</span> GAF-TRX GAFP可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'PLEDGE'"><span>{{multiTotalAmountB}}</span> GAF-TRX GAFP可用</div>
         <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'PLEDGE'"><span>{{singleTotalAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'REDEEM'"><span>{{doubleAmountA}}</span> GAF-TRX GAFP可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> GAF-TRX GAFP可用</div>
         <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'REDEEM'"><span>{{singleAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
         <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'HARVEST'"><span>{{singleUserIncome}}</span> OLPC可收获</div>
         <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'HARVEST'"><span>{{doubleUserIncome}}</span> OLPC可收获</div>
@@ -164,11 +164,11 @@ export default {
       const singleUserIncome = ref<number>(0);  // 单币矿池收益
       const doubleUserIncome = ref<number>(0);  // 双币矿池收益
       const recommedUserIncome = ref<number>(0);  // 用户推荐收益
-      const doubleAmountA = ref<number>(0);     // 双币矿池GAFP质押数量
-      const doubleAmountB = ref<number>(0);     // 双币矿池OLPC质押数量
+      const doubleAmountA = ref<number>(0);     // 双币矿池OLPC质押数量
+      const doubleAmountB = ref<number>(0);     // 双币矿池GAFP质押数量
       const singleAmount = ref<number>(0);      // 单币质押数量
       const singleTotalAmount = ref<number>(0); // 单币可质押数量
-      const multiTotalAmountA = ref<number>(0); // 双币GAFP可质押数量
+      const multiTotalAmountA = ref<number>(0); // 双币OLPC可质押数量
       const multiTotalAmountB = ref<number>(0); // 双币GAFP可质押数量
       const ability = ref<number>(0);          // 推荐算力
       
@@ -346,6 +346,7 @@ export default {
       const onGetUserStakeAsset = async () => {
           try {
             const res = await multiPie.getUserStakeAsset();
+            console.log(res);
             const amountA:number = (window as any).tronWeb.toDecimal(res.amountA);
             const amountB:number = (window as any).tronWeb.toDecimal(res.amountB);
             doubleAmountA.value = utils.toFixed(Number(new Decimal(amountA).div(pow)), 4) ;
@@ -445,8 +446,8 @@ export default {
           if (pledgeType.value === "GAFP+OLPC") {
             utils.loading('质押中');
             console.log(Number(OLPCAmount.value) * pow)
-            const amountA = Number(gafpAmount.value) * pow;
-            const amountB = Number(OLPCAmount.value) * pow;
+            const amountA = Number(OLPCAmount.value) * pow;
+            const amountB = Number(gafpAmount.value) * pow;
             const res = await multiPie.provideTwoAsset(amountA,amountB);
             console.log(res);
             Toast.success({message:'质押成功', onClose: () => {
@@ -527,8 +528,8 @@ export default {
             utils.loading('赎回中');
             console.log(Number(doubleIncomeAmount.value) * pow)
             console.log(Number(OLPCAmount.value) * pow)
-            const amountA = Number(gafpAmount.value) * pow;
-            const amountB = Number(OLPCAmount.value) * pow;
+            const amountA = Number(OLPCAmount.value) * pow;
+            const amountB = Number(gafpAmount.value) * pow;
             const res = await multiPie.withdrawTwoAsset(amountA, amountB);
             console.log(res);
             Toast.success({message:'赎回成功', onClose: () => {

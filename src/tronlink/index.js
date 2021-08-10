@@ -220,10 +220,6 @@ export class MultiPie {
         return window.multiPieContract.claim(this.wellet_address, window.tronWeb.toHex(amount)).call();
     }
 
-    totalSupply() {
-        return window.singlePieContract.totalSupply().call();
-    }
-
 }
 
 
