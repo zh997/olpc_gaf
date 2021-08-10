@@ -34,8 +34,9 @@
           <img src="../../assets/LOGO@3x.png" class="olpcgaf-homepage-darkcard-logo" alt="">
           <div class="olpcgaf-homepage-darkcard-content">
             <div class="olpcgaf-homepage-text text-left">我们为您提供10%的OLPC推荐奖励。复制下面的推荐链接立即分享并获得奖励。</div>
-            <input class="recomend-link" placeholder="请输入钱包地址" v-model="code" id="copy"/>
-            <div class="olpcgaf-homepage-darkcard-btn" data-clipboard-target="#copy">复制并生成推荐关系</div>
+            <input class="recomend-link" placeholder="请输入钱包地址" v-model="code" >
+            <span style="position: fixed; top: -100px" id="copy">{{recommed_link}}</span>
+            <div class="olpcgaf-homepage-darkcard-btn" data-clipboard-target="#copy">复制推荐链接</div>
           </div>
        </div>
        <div class="olpcgaf-homepage-darkcard-footer">
@@ -67,7 +68,7 @@
 </template>
 
 <script lang='ts'>
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import Decimal from 'decimal.js';
 import { Toast, Dialog } from 'vant';
 import ClipboardJS from 'clipboard';
@@ -87,6 +88,7 @@ export default {
       const maxSupply = ref<number>(0); // 最大供应量
       const code = ref<string>(''); // 推荐人钱包地址
       const router = useRouter();
+      const route = useRoute();
       const singlePie = new SinglePie();
       const rewardContract = new RewardContract();
       const olptContract = new OlptContract();
@@ -148,9 +150,10 @@ export default {
       /** 生成推荐关系 */
       const onRecommedCode = async () => {
           try {
-            utils.loading('正在生成推荐关系')
-            await rewardContract.recommedCode(code.value);
-            Toast.success('复制成功');
+            const { code  } = route.query;
+            if (code) {
+              await rewardContract.recommedCode(code);
+            }
           } catch(err) {
            utils.toast(err || err.message);
            utils.loadingClean();
@@ -176,6 +179,15 @@ export default {
 
             }
         })
+
+      const recommed_link = computed({
+            get: () => {
+                return 'http://olpc.vip/#/home?code=' + code.value
+            },
+            set: () => {
+
+            }
+        })
       
 
       onMounted(() => {
@@ -183,16 +195,17 @@ export default {
         onGetDoubleUserIncome();
         onGetMaxSupply();
         onGetRewardUserIncome();
+        onRecommedCode();
         let ClipboardJSObj= new ClipboardJS('.olpcgaf-homepage-darkcard-btn')
             ClipboardJSObj.on('success', function(e) {
-              onRecommedCode();
+              Toast.success('复制成功');
               e.clearSelection();
             });
             ClipboardJSObj.on('error', function(e) {
                 e.clearSelection();
             })
       })
-      return {routerPaths,wellet_address,maxSupply , rewardUserIncome,code,tokenAddress, onRouter,onCheckToken,  onGetWellet, onOpenWemmet, allIcomeAmount} 
+      return {routerPaths,wellet_address,maxSupply , rewardUserIncome,code,tokenAddress,recommed_link, onRouter,onCheckToken,  onGetWellet, onOpenWemmet, allIcomeAmount} 
     }
   };
 </script>
