@@ -18,7 +18,7 @@
     <div class="sizedbox-height-80"></div>
     <div class="olpcgaf-select-shadowcard">
         <div class="olpcgaf-select-shadowcard-logos">
-           <img src="../../assets/gary_logo_1@2x.png" class="olpcgaf-select-shadowcard-logo" alt="">
+           <img src="../../assets/4.png" class="olpcgaf-select-shadowcard-logo" alt="">
         </div>
       
        <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needGafpApprove">
@@ -40,7 +40,7 @@
       <div class="olpcgaf-select-shadowcard-logos">
          <img src="../../assets/4.png" class="olpcgaf-select-shadowcard-logo" alt=""> 
          <span>+</span> 
-         <img src="../../assets/gary_logo_1@2x.png" class="olpcgaf-select-shadowcard-logo" alt=""> 
+         <img src="../../assets/gary_logo.png" class="olpcgaf-select-shadowcard-logo" alt=""> 
       </div>
        <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needDoubleApprove">
           <!-- <div class="olpcgaf-select-shadowcard-title-label">收益</div> -->
@@ -63,7 +63,7 @@
     </div>
     <div class="olpcgaf-select-shadowcard">
       <div class="olpcgaf-select-shadowcard-logos">
-           <img src="../../assets/4.png" class="olpcgaf-select-shadowcard-logo" alt="">
+           <img src="../../assets/gary_logo.png" class="olpcgaf-select-shadowcard-logo" alt="">
       </div>
     
          <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needOlpcApprove">
@@ -84,18 +84,18 @@
   </div>
   <van-popup v-model:show="visible" @close="onPopupClose" position="bottom">
       <div class="popup-form-wrap">
-        <div class="popup-form-title">{{OperTypeText[operType]}} {{operType !== 'HARVEST' ? 'OSK-TRX ' + pledgeType : 'OLPC'}}</div>
+        <div class="popup-form-title">{{OperTypeText[operType]}} {{operType !== 'HARVEST' ? (pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX') + pledgeType : 'OLPC'}}</div>
         <van-field v-model="olppAmount" v-if="pledgeType === 'OLPP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'OLPP'} ${OperTypeText[operType]}数量`">
           <template #button>
-            <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">OSK-TRX OLPP <span @click="onSetAll">最大</span></div>
+            <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">OLPC-TRX OLPC <span @click="onSetAll">最大</span></div>
             <div class="popup-form-item-unit" v-else>OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountB}}</span> OSK-TRX OLPP可用</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> OSK-TRX OLPP可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountB}}</span> OLPC-TRX OLPC可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> OLPC-TRX OLPC可用</div>
         <van-field v-model="gafpAmount" v-if="pledgeType === 'GAFP' || (pledgeType === 'GAFP+OLPP' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'GAFP'} ${OperTypeText[operType]}数量`" >
           <template #button>
-            <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">OSK-TRX GAFP <span @click="onSetAll">最大</span></div>
+            <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">GAF-TRX GAFP <span @click="onSetAll">最大</span></div>
             <div class="popup-form-item-unit" v-else>OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
@@ -104,10 +104,10 @@
             <div class="popup-form-item-unit">OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountA}}</span> OSK-TRX GAFP可用</div>
-        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'PLEDGE'"><span>{{singleTotalAmount}}</span> OSK-TRX {{pledgeType}}可用</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountA}}</span> OSK-TRX GAFP可用</div>
-        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'REDEEM'"><span>{{singleAmount}}</span> OSK-TRX {{pledgeType}}可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'PLEDGE'"><span>{{multiTotalAmountA}}</span> GAF-TRX GAFP可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'PLEDGE'"><span>{{singleTotalAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'REDEEM'"><span>{{doubleAmountA}}</span> GAF-TRX GAFP可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'REDEEM'"><span>{{singleAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
         <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPP') && operType === 'HARVEST'"><span>{{singleUserIncome}}</span> OLPC可收获</div>
         <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPP' && operType === 'HARVEST'"><span>{{doubleUserIncome}}</span> OLPC可收获</div>
          <div class="popup-footer">
@@ -315,7 +315,6 @@ export default {
       const onGetUserStakeAsset = async () => {
           try {
             const res = await multiPie.getUserStakeAsset();
-            console.log(res);
             const amountA:number = (window as any).tronWeb.toDecimal(res.amountA);
             const amountB:number = (window as any).tronWeb.toDecimal(res.amountB);
             doubleAmountA.value = utils.toFixed(Number(new Decimal(amountA).div(pow)), 4) ;
@@ -330,7 +329,7 @@ export default {
       const onGetSingleUserStakeAsset = async () => {
           try {
             const res = await singlePie.getUserStakeAsset();
-            const amount:number = (window as any).tronWeb.toDecimal(res.amount)
+            const amount:number = (window as any).tronWeb.toDecimal(res._stake)
             singleAmount.value =utils.toFixed( Number(new Decimal(amount).div(pow)), 4);
           } catch(err) {
            utils.toast(err || err.message);
@@ -342,8 +341,7 @@ export default {
       const onGetSingleTotalAmount = async () => {
           try {
             const res = await singlePie.getUserWalletAsset(tokenAddress.GAFP);
-            console.log(res);
-            const amount:number = (window as any).tronWeb.toDecimal(res.amount)
+            const amount:number = (window as any).tronWeb.toDecimal(res)
             singleTotalAmount.value =utils.toFixed(Number(new Decimal(amount).div(pow)), 4);
           } catch(err) {
            utils.toast(err || err.message);

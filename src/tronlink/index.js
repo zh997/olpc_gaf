@@ -3,14 +3,14 @@ const FarmTwoAsset = require('./FarmTwoAsset.json');
 const ITRC20 = require('./ITRC20.json');
 const Recommed = require('./Recommed.json');
 const Olpc = require('./Olpc.json');
-const { pow }  = require('@/constants/index');
+const { pow } = require('@/constants/index');
 
 /** 代币地址 */
 // export const tokenAddress = {
-//     OLPC: 'TA15uPAzkwbXUtzK8cUvrLKUjcjiEY99RS',
-//     GAFP: 'TVbRqw2oZTyD8sPojc9Gjb4q5aGR125hgx',
-//     OLPP: 'TANvziYPGfYkY1nfuXgH2tTTq4ZmzZ8mcT'
-// }
+//         OLPC: 'TA15uPAzkwbXUtzK8cUvrLKUjcjiEY99RS',
+//         GAFP: 'TVbRqw2oZTyD8sPojc9Gjb4q5aGR125hgx',
+//         OLPP: 'TANvziYPGfYkY1nfuXgH2tTTq4ZmzZ8mcT'
+//     }
 export const tokenAddress = {
     OLPC: 'TA15uPAzkwbXUtzK8cUvrLKUjcjiEY99RS',
     GAFP: 'TVpN8X4FUAsDAW6J9m3c58v3dacJJgpH8N',
@@ -141,11 +141,11 @@ export class SinglePie {
 
     /** 获取矿池总质押数量 */
     getTotalAmount() {
-            return window.singlePieContract.getTotalAmount()
+            return window.singlePieContract.getTotalAmount().call();
         }
         /** 获取用户可质押数量 */
     getUserWalletAsset(token) {
-        return window.singlePieContract.getUserWalletAsset(token, this.wellet_address)
+        return window.singlePieContract.getUserWalletAsset(token, this.wellet_address).call()
     }
 
     /** 获取用户收益 */
@@ -186,11 +186,11 @@ export class MultiPie {
 
     /** 矿池内两币种的质押总量 */
     getTotalAmount() {
-            return window.multiPieContract.getTotalAmount()
+            return window.multiPieContract.getTotalAmount().call()
         }
         /** 获取用户可质押数量 */
     getUserWalletAsset(token) {
-            return window.multiPieContract.getUserWalletAsset(token, this.wellet_address)
+            return window.multiPieContract.getUserWalletAsset(token, this.wellet_address).call()
         }
         /** 获取用户收益 */
     userIncome() {
