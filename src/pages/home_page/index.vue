@@ -108,7 +108,6 @@ export default {
             singleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4); 
          } catch(err) {
            utils.toast(err || err.message);
-           utils.loadingClean();
          }
       }
 
@@ -120,7 +119,6 @@ export default {
             doubleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4);
           } catch(err) {
            utils.toast(err || err.message);
-           utils.loadingClean();
           }
       }
       /** 获取用最大供应量 */
@@ -131,7 +129,6 @@ export default {
             maxSupply.value = Number(new Decimal(supply).div(pow))
           } catch(err) {
            utils.toast(err || err.message);
-           utils.loadingClean();
           }
       }
 
@@ -143,7 +140,6 @@ export default {
             rewardUserIncome.value = Number(new Decimal(income).div(pow))
           } catch(err) {
            utils.toast(err || err.message);
-           utils.loadingClean();
           }
       }
 
@@ -173,7 +169,8 @@ export default {
             get: () => {
                 const a = new Decimal(Number(singleUserIncome.value));
                 const b = new Decimal(Number(doubleUserIncome.value));
-                return utils.toFixed(Number(a.add(b)), 4);
+                const c = new Decimal(Number(rewardUserIncome.value));
+                return utils.toFixed(Number(a.add(b).add(c)), 4);
             },
             set: () => {
 

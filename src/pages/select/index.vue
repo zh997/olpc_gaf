@@ -204,7 +204,7 @@ export default {
            gafpAmount.value = singleUserIncome.value.toString();
         }
         if(pledgeType.value  === "OLPC" && operType.value === "HARVEST") {
-           OLPCAmount.value = singleUserIncome.value.toString();
+           OLPCAmount.value = recommedUserIncome.value.toString();
         }
         if(pledgeType.value  === "GAFP+OLPC" && operType.value === "HARVEST") {
           doubleIncomeAmount.value = doubleUserIncome.value.toString();
@@ -299,7 +299,6 @@ export default {
           try {
             const res = await singlePie.userIncome();
             const income:number = (window as any).tronWeb.toDecimal(res.income);
-            console.log(Number(new Decimal(income).div(pow)),income)
             singleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4); 
          } catch(err) {
            console.log(err);
