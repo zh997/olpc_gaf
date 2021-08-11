@@ -23,7 +23,7 @@
       
        <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needGafpApprove">
           <!-- <div class="olpcgaf-select-shadowcard-title-label">收益</div> -->
-          <div class="olpcgaf-select-shadowcard-title-value">{{singleUserIncome}}</div>
+          <div class="olpcgaf-select-shadowcard-title-value">{{utils.toFixed(singleUserIncome, 4)}}</div>
        </div>
         <!-- <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needGafpApprove">
           <div class="olpcgaf-select-shadowcard-title-label">数量</div>
@@ -44,7 +44,7 @@
       </div>
        <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needDoubleApprove">
           <!-- <div class="olpcgaf-select-shadowcard-title-label">收益</div> -->
-          <div class="olpcgaf-select-shadowcard-title-value">{{doubleUserIncome}}</div>
+          <div class="olpcgaf-select-shadowcard-title-value">{{utils.toFixed(doubleUserIncome, 4)}}</div>
        </div>
         <!-- <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needDoubleApprove">
           <div class="olpcgaf-select-shadowcard-title-label">GAF 数量</div>
@@ -68,7 +68,7 @@
     
          <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needOlpcApprove">
           <!-- <div class="olpcgaf-select-shadowcard-title-label">收益</div> -->
-          <div class="olpcgaf-select-shadowcard-title-value">{{recommedUserIncome}}</div>
+          <div class="olpcgaf-select-shadowcard-title-value">{{utils.toFixed(recommedUserIncome, 4)}}</div>
        </div>
         <!-- <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needOlpcApprove">
           <div class="olpcgaf-select-shadowcard-title-label">数量</div>
@@ -109,7 +109,8 @@
         <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'PLEDGE'"><span>{{singleTotalAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
         <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> GAF-TRX GAFP可用</div>
         <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'REDEEM'"><span>{{singleAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
-        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'HARVEST'"><span>{{singleUserIncome}}</span> OLPC可收获</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP'  && operType === 'HARVEST'"><span>{{singleUserIncome}}</span> OLPC可收获</div>
+        <div class="popup-form-count" v-if="pledgeType === 'OLPC' && operType === 'HARVEST'"><span>{{recommedUserIncome}}</span> OLPC可收获</div>
         <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'HARVEST'"><span>{{doubleUserIncome}}</span> OLPC可收获</div>
          <div class="popup-footer">
             <div class="popup-footer-btn border-btn" @click="onHidePopup">取消</div>
@@ -299,7 +300,7 @@ export default {
           try {
             const res = await singlePie.userIncome();
             const income:number = (window as any).tronWeb.toDecimal(res.income);
-            singleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4); 
+            singleUserIncome.value = Number(new Decimal(income).div(pow))
          } catch(err) {
            console.log(err);
            utils.toast(err || err.message);
@@ -311,7 +312,7 @@ export default {
           try {
             const res = await multiPie.userIncome();
             const income:number = (window as any).tronWeb.toDecimal(res.income);
-            doubleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4);
+            doubleUserIncome.value = Number(new Decimal(income).div(pow))
           } catch(err) {
             console.log(err);
            utils.toast(err || err.message);
@@ -323,7 +324,7 @@ export default {
           try {
             const res = await rewardContract.userIncome();
             const income:number = (window as any).tronWeb.toDecimal(res.income);
-            recommedUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4);
+            recommedUserIncome.value = Number(new Decimal(income).div(pow))
           } catch(err) {
             console.log(err);
            utils.toast(err || err.message);
@@ -335,7 +336,7 @@ export default {
           try {
             const res = await rewardContract.getUserInfo();
             const _ability:number = (window as any).tronWeb.toDecimal(res._ability);
-            ability.value = utils.toFixed(Number(new Decimal(_ability).div(pow)), 4);
+            ability.value = Number(new Decimal(_ability).div(pow))
           } catch(err) {
             console.log(err);
            utils.toast(err || err.message);
@@ -349,8 +350,8 @@ export default {
             console.log(res);
             const amountA:number = (window as any).tronWeb.toDecimal(res.amountA);
             const amountB:number = (window as any).tronWeb.toDecimal(res.amountB);
-            doubleAmountA.value = utils.toFixed(Number(new Decimal(amountA).div(pow)), 4) ;
-            doubleAmountB.value = utils.toFixed(Number(new Decimal(amountB).div(pow)), 4);
+            doubleAmountA.value = Number(new Decimal(amountA).div(pow));
+            doubleAmountB.value = Number(new Decimal(amountB).div(pow));
           } catch(err) {
             console.log(err);
            utils.toast(err || err.message);
@@ -362,7 +363,7 @@ export default {
           try {
             const res = await singlePie.getUserStakeAsset();
             const amount:number = (window as any).tronWeb.toDecimal(res._stake)
-            singleAmount.value =utils.toFixed( Number(new Decimal(amount).div(pow)), 4);
+            singleAmount.value = Number(new Decimal(amount).div(pow));
           } catch(err) {
             console.log(err);
            utils.toast(err || err.message);
@@ -374,7 +375,7 @@ export default {
           try {
             const res = await singlePie.getUserWalletAsset(tokenAddress.GAFP);
             const amount:number = (window as any).tronWeb.toDecimal(res)
-            singleTotalAmount.value =utils.toFixed(Number(new Decimal(amount).div(pow)), 4);
+            singleTotalAmount.value = Number(new Decimal(amount).div(pow));
           } catch(err) {
             console.log(err);
            utils.toast(err || err.message);
@@ -384,12 +385,12 @@ export default {
       /** 获取双币可质押数量 */
       const onGetMultiTotalAmount = async () => {
           try {
-            const [resA, resB] = await Promise.all([multiPie.getUserWalletAsset(tokenAddress.GAFP), 
-            multiPie.getUserWalletAsset(tokenAddress.OLPC)]);
+            const [resA, resB] = await Promise.all([multiPie.getUserWalletAsset(tokenAddress.OLPC), 
+            multiPie.getUserWalletAsset(tokenAddress.GAFP)]);
             const amountA:number = (window as any).tronWeb.toDecimal(resA);
             const amountB:number = (window as any).tronWeb.toDecimal(resB);
-            multiTotalAmountA.value = utils.toFixed(Number(new Decimal(amountA).div(pow)), 4) ;
-            multiTotalAmountB.value = utils.toFixed(Number(new Decimal(amountB).div(pow)), 4);
+            multiTotalAmountA.value = Number(new Decimal(amountA).div(pow));
+            multiTotalAmountB.value = Number(new Decimal(amountB).div(pow));
           } catch(err) {
             console.log(err);
            utils.toast(err || err.message);
@@ -576,6 +577,7 @@ export default {
         multiTotalAmountB,
         recommedUserIncome,
         ability,
+        utils,
         onGetWellet,
         onHidePopup,
         onConfirm,

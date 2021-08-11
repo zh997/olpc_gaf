@@ -20,7 +20,7 @@ export const tokenAddress = {
 /** 矿池地址 */
 export const pieAddress = {
     single: 'TJnaM32oyo3PqkCUpQ2vGg1qZ2BnYrPfWG',
-    multi: 'TAa3Gw2rAPnfN4czsWcGRNKFDjPsmdKoJW',
+    multi: 'TF2x5a1vaEaNyDXY2p43eoeMQuPFwyKofd',
     reward: 'TTCDSKBXz44xiWfJvBYDTFX8CvkrDLtpy2'
 }
 
@@ -209,7 +209,7 @@ export class MultiPie {
         }
         /** 解除两种资产挖矿 */
     withdrawTwoAsset(amountA, amountB) {
-            return window.oneContract.withdrawTwoAsset(
+            return window.multiPieContract.withdrawTwoAsset(
                 this.wellet_address,
                 window.tronWeb.toHex(amountA),
                 window.tronWeb.toHex(amountB),

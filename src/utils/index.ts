@@ -33,7 +33,7 @@ export const toFixed = (amount: any, n: any) => {
 	if(n <= 0) {
 		return Math.round(amount);
 	}
-	amount = Math.round(amount * Math.pow(10, n)) / Math.pow(10, n); //四舍五入
+	amount = String(amount).replace(/^(.*\..{4}).*$/,"$1"); //保留四位小数
 	amount = Number(amount).toFixed(n); //补足位数
 	return amount;
 }
