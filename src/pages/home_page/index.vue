@@ -3,11 +3,11 @@
   <div class="olpcgaf-homepage">
     <div class="olpcgaf-homepage-header">
      <img src="../../assets/3.png" class="olpcgaf-homepage-header-logo" alt="">
-      <div class="olpcgaf-homepage-header-btn" @click="onGetWellet" v-if="!wellet_address">
+      <div class="olpcgaf-homepage-header-btn" @click="onGetWellet" v-if="!encryption_wellet_address">
        我的钱包
      </div>
      <div class="olpcgaf-homepage-header-address" v-else>
-       {{wellet_address}}
+       {{encryption_wellet_address}}
      </div>
     </div>
     <div class="olpcgaf-homepage-largelogo">
@@ -26,7 +26,7 @@
     </div>
     <div class="olpcgaf-homepage-card">
        <div class="olpcgaf-homepage-card-title">我的OLPC余额</div>
-       <div class="olpcgaf-homepage-card-price">{{rewardUserIncome}}</div>
+       <div class="olpcgaf-homepage-card-price">{{allIcomeAmount}}</div>
        <div class="olpcgaf-homepage-card-footer">仅有60天的挖矿时间，马上开始挖吧</div>
     </div>
     <div class="olpcgaf-homepage-darkcard">
@@ -44,22 +44,23 @@
          <span>{{maxSupply}}  OLPC</span>
        </div>
     </div>
-    <div class="olpcgaf-homepage-shadowcard">
-       <img src="../../assets/gary_logo.png" class="olpcgaf-homepage-shadowcard-logo" alt="">
-       <div class="olpcgaf-homepage-shadowcard-title">OLPC-TRX LP</div>
-       <p class="olpcgaf-homepage-text">质押OLPC-TRX LP</p>
-       <p class="olpcgaf-homepage-text">赚取{{maxSupply}} OLPC</p>
-       <p class="olpcgaf-homepage-link" @click="onCheckToken">查看合约</p>
-       <p class="olpcgaf-homepage-shadowcard-text">{{allIcomeAmount}} OLPC准备收获</p>
-       <div class="olpcgaf-homepage-shadowcard-btn" @click="onRouter(routerPaths.select_page)">选择</div>
-    </div>
-    <div class="olpcgaf-homepage-tencentlogo">
+     <div class="olpcgaf-homepage-tencentlogo">
       <img src="../../assets/Tencent_Conference_icon.png" alt="">
     </div>
     <div class="olpcgaf-homepage-tencentform">
        <input type="text" class="olpcgaf-homepage-tencentform-input" placeholder="请输入个人会议号">
        <div class="olpcgaf-homepage-tencentform-btn" @click="onOpenWemmet">确定</div>
     </div>
+    <div class="olpcgaf-homepage-shadowcard">
+       <img src="../../assets/4.png" class="olpcgaf-homepage-shadowcard-logo" alt="">
+       <div class="olpcgaf-homepage-shadowcard-title">GAF-TRX LP</div>
+       <p class="olpcgaf-homepage-text">质押GAF-TRX LP</p>
+       <p class="olpcgaf-homepage-text">赚取{{maxSupply}} OLPC</p>
+       <p class="olpcgaf-homepage-link" @click="onCheckToken">查看合约</p>
+       <p class="olpcgaf-homepage-shadowcard-text">{{allIcomeAmount}} OLPC准备收获</p>
+       <div class="olpcgaf-homepage-shadowcard-btn" @click="onRouter(routerPaths.select_page)">选择</div>
+    </div>
+   
      <div class="olpcgaf-homepage-address">
         <div class="olpcgaf-homepage-address-title">OLPC Token  地址：</div>
         <div class="olpcgaf-homepage-address-content">{{tokenAddress.OLPC}}</div>
@@ -81,12 +82,12 @@ import { onMounted,ref, computed } from 'vue';
 export default {
     name: 'home_page',
     setup() {
-      const { wellet_address, onGetWellet } = useGlobalHooks();
+      const { encryption_wellet_address, wellet_address, onGetWellet } = useGlobalHooks();
       const singleUserIncome = ref<number>(0);  // 单币矿池收益
       const doubleUserIncome = ref<number>(0);  // 双币矿池收益
       const rewardUserIncome = ref<number>(0);  // 推荐收益
       const maxSupply = ref<number>(0); // 最大供应量
-      const code = ref<string>(''); // 推荐人钱包地址
+      const code = ref<string>(wellet_address); // 推荐人钱包地址
       const router = useRouter();
       const route = useRoute();
       const singlePie = new SinglePie();
@@ -202,7 +203,7 @@ export default {
                 e.clearSelection();
             })
       })
-      return {routerPaths,wellet_address,maxSupply , rewardUserIncome,code,tokenAddress,recommed_link, onRouter,onCheckToken,  onGetWellet, onOpenWemmet, allIcomeAmount} 
+      return {routerPaths,encryption_wellet_address,maxSupply , rewardUserIncome,code,tokenAddress,recommed_link, onRouter,onCheckToken,  onGetWellet, onOpenWemmet, allIcomeAmount} 
     }
   };
 </script>

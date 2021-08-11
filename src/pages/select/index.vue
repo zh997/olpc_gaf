@@ -3,11 +3,11 @@
   <div class="olpcgaf-select">
     <div class="olpcgaf-select-header">
      <img src="../../assets/3.png" class="olpcgaf-select-header-logo" alt="">
-     <div class="olpcgaf-select-header-btn" @click="onGetWellet" v-if="!wellet_address">
+     <div class="olpcgaf-select-header-btn" @click="onGetWellet" v-if="!encryption_wellet_address">
        我的钱包
      </div>
      <div class="olpcgaf-select-header-address" v-else>
-       {{wellet_address}}
+       {{encryption_wellet_address}}
      </div>
     </div>
     <div class="olpcgaf-select-largelogo">
@@ -34,7 +34,7 @@
        <div class="olpcgaf-select-shadowcard-btn" @click="onApprove(pieAddress.single,tokenAddress.GAFP)" v-if="!needGafpApprove">授权</div>
        <div class="olpcgaf-select-shadowcard-btn" v-if="needGafpApprove" @click="onShowPopup('GAFP', 'PLEDGE')">质押</div>
        <div class="olpcgaf-select-shadowcard-btn" v-if="needGafpApprove" @click="onShowPopup('GAFP', 'HARVEST')">收获</div>
-       <div class="olpcgaf-select-shadowcard-btn" v-if="needGafpApprove" @click="onShowPopup('GAFP', 'REDEEM')">赎回</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needGafpApprove" @click="onShowPopup('GAFP', 'REDEEM')">解押</div>
     </div>
     <div class="olpcgaf-select-shadowcard">
       <div class="olpcgaf-select-shadowcard-logos">
@@ -59,7 +59,7 @@
        <div class="olpcgaf-select-shadowcard-btn" @click="onApproveDuoble" v-if="!needDoubleApprove">授权</div>
        <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove" @click="onShowPopup('GAFP+OLPC','PLEDGE')">质押</div>
        <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove" @click="onShowPopup('GAFP+OLPC','HARVEST')">收获</div>
-       <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove"  @click="onShowPopup('GAFP+OLPC','REDEEM')">赎回</div>
+       <div class="olpcgaf-select-shadowcard-btn" v-if="needDoubleApprove"  @click="onShowPopup('GAFP+OLPC','REDEEM')">解押</div>
     </div>
     <div class="olpcgaf-select-shadowcard">
       <div class="olpcgaf-select-shadowcard-logos">
@@ -79,22 +79,22 @@
        <div class="olpcgaf-select-shadowcard-btn"  @click="onApprove(pieAddress.single,tokenAddress.OLPC)" v-if="!needOlpcApprove">授权</div>
        <!-- <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'PLEDGE')">质押</div> -->
        <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'HARVEST')">收获</div>
-        <!-- <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'REDEEM')">赎回</div> -->
+        <!-- <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'REDEEM')">解押</div> -->
         <p class="olpcgaf-select-shadowcard-text" v-if="needOlpcApprove">推荐算力: {{ability}}</p>
     </div>
   </div>
   <van-popup v-model:show="visible" @close="onPopupClose" position="bottom">
       <div class="popup-form-wrap">
         <div class="popup-form-title">{{OperTypeText[operType]}} {{operType !== 'HARVEST' ? (pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX ') + pledgeType : 'OLPC'}}</div>
-        <van-field v-model="OLPCAmount" v-if="pledgeType === 'OLPC' || (pledgeType === 'GAFP+OLPC' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'OLPC'} ${OperTypeText[operType]}数量`">
+        <van-field v-model="OLPCAmount" v-if="pledgeType === 'OLPC' || (pledgeType === 'GAFP+OLPC' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'OLPC-TRX LP'} ${OperTypeText[operType]}数量`">
           <template #button>
-            <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">OLPC-TRX OLPC <span @click="onSetAll">最大</span></div>
+            <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">OLPC-TRX LP <span @click="onSetAll">最大</span></div>
             <div class="popup-form-item-unit" v-else>OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'PLEDGE'"><span>{{multiTotalAmountA}}</span> OLPC-TRX OLPC可用</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'REDEEM'"><span>{{doubleAmountA}}</span> OLPC-TRX OLPC可用</div>
-        <van-field v-model="gafpAmount" v-if="pledgeType === 'GAFP' || (pledgeType === 'GAFP+OLPC' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'GAFP'} ${OperTypeText[operType]}数量`" >
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'PLEDGE'"><span>{{multiTotalAmountA}}</span> OLPC-TRX LP可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'REDEEM'"><span>{{doubleAmountA}}</span> OLPC-TRX LP可用</div>
+        <van-field v-model="gafpAmount" v-if="pledgeType === 'GAFP' || (pledgeType === 'GAFP+OLPC' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'GAF-TRX LP'} ${OperTypeText[operType]}数量`" >
           <template #button>
             <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">GAF-TRX GAFP <span @click="onSetAll">最大</span></div>
             <div class="popup-form-item-unit" v-else>OLPC <span @click="onSetAll">最大</span></div>
@@ -105,10 +105,10 @@
             <div class="popup-form-item-unit">OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'PLEDGE'"><span>{{multiTotalAmountB}}</span> GAF-TRX GAFP可用</div>
-        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'PLEDGE'"><span>{{singleTotalAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
-        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> GAF-TRX GAFP可用</div>
-        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'REDEEM'"><span>{{singleAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX'}} {{pledgeType}}可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'PLEDGE'"><span>{{multiTotalAmountB}}</span> GAF-TRX LP可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'PLEDGE'"><span>{{singleTotalAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX LP': 'OLPC-TRX LP'}}可用</div>
+        <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'REDEEM'"><span>{{doubleAmountB}}</span> GAF-TRX LP可用</div>
+        <div class="popup-form-count" v-if="(pledgeType === 'GAFP' || pledgeType === 'OLPC') && operType === 'REDEEM'"><span>{{singleAmount}}</span>{{pledgeType === "GAFP" ? 'GAF-TRX LP': 'OLPC-TRX LP'}} 可用</div>
         <div class="popup-form-count" v-if="pledgeType === 'GAFP'  && operType === 'HARVEST'"><span>{{singleUserIncome}}</span> OLPC可收获</div>
         <div class="popup-form-count" v-if="pledgeType === 'OLPC' && operType === 'HARVEST'"><span>{{recommedUserIncome}}</span> OLPC可收获</div>
         <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'HARVEST'"><span>{{doubleUserIncome}}</span> OLPC可收获</div>
@@ -141,14 +141,15 @@ export default {
       [Button.name]: Button
     },
     setup() {
+      let timer: number = 0;
       type TPledgeType = "GAFP" | "OLPC" | "GAFP+OLPC";
       type TOperType = "PLEDGE" | "HARVEST" | "REDEEM";
       const OperTypeText = {
          "PLEDGE": '质押',
          "HARVEST": '收获',
-         "REDEEM": '赎回'
+         "REDEEM": '解押'
       }
-      const { wellet_address, onGetWellet } = useGlobalHooks();
+      const { encryption_wellet_address, onGetWellet } = useGlobalHooks();
       
       const singlePie = new SinglePie();
       const multiPie = new MultiPie();
@@ -197,8 +198,8 @@ export default {
           OLPCAmount.value = singleTotalAmount.value.toString();
         }
         if(pledgeType.value  === "GAFP+OLPC" && operType.value === "PLEDGE") {
-            gafpAmount.value = multiTotalAmountA.value.toString();
-            OLPCAmount.value = multiTotalAmountB.value.toString();
+          OLPCAmount.value = multiTotalAmountA.value.toString();
+          gafpAmount.value = multiTotalAmountB.value.toString();
         }
 
         if(pledgeType.value  === "GAFP" && operType.value === "HARVEST") {
@@ -250,7 +251,6 @@ export default {
             onGetUserIncome();
             onGetSingleUserStakeAsset();
             onGetSingleTotalAmount();
-            onGetRecommedUserIncome();
             onGetUserInfo();
           }
           if (res3 && res4) {
@@ -258,6 +258,7 @@ export default {
             onGetUserStakeAsset();
             onGetMultiTotalAmount()
           }
+          onPollIncome();
           utils.loadingClean();
          } catch(err) {
            console.log(err);
@@ -329,6 +330,16 @@ export default {
             console.log(err);
            utils.toast(err || err.message);
           }
+      }
+
+      /** 轮询收益 */
+      const onPollIncome = async () => {
+         clearInterval(timer);
+         timer = setInterval (() => {
+            if (needGafpApprove.value) onGetUserIncome();
+            if (needDoubleApprove.value) onGetDoubleUserIncome();
+            if (needOlpcApprove.value) onGetRecommedUserIncome(); 
+         }, 1000);
       }
 
       /** 获取用户的各项信息 */
@@ -414,7 +425,7 @@ export default {
           if (operType.value === "HARVEST") {
               onHarverst(); 
           }
-           /** 赎回 */
+           /** 解押 */
           if (operType.value === "REDEEM") {
               onRedeem(); 
           }
@@ -502,38 +513,38 @@ export default {
         }
       }
 
-      /** 赎回 */
+      /** 解押 */
       const onRedeem = async () => {
         try{
          if (pledgeType.value === "GAFP") {
-            utils.loading('赎回中');
+            utils.loading('解押中');
             console.log(Number(gafpAmount.value) * pow)
             const res = await singlePie.withdrawOneAsset(Number(gafpAmount.value) * pow);
             console.log(res);
-              Toast.success({message:'赎回成功', onClose: () => {
+              Toast.success({message:'解押成功', onClose: () => {
               visible.value = false;
               onGetApproveStatus();
             }})
           }
           if (pledgeType.value === "OLPC") {
-            utils.loading('赎回中');
+            utils.loading('解押中');
             console.log(Number(OLPCAmount.value) * pow)
             const res = await singlePie.withdrawOneAsset(Number(OLPCAmount.value) * pow);
             console.log(res);
-            Toast.success({message:'赎回成功', onClose: () => {
+            Toast.success({message:'解押成功', onClose: () => {
               visible.value = false;
               onGetApproveStatus();
             }})
           }
           if (pledgeType.value === "GAFP+OLPC") {
-            utils.loading('赎回中');
+            utils.loading('解押中');
             console.log(Number(doubleIncomeAmount.value) * pow)
             console.log(Number(OLPCAmount.value) * pow)
             const amountA = Number(OLPCAmount.value) * pow;
             const amountB = Number(gafpAmount.value) * pow;
             const res = await multiPie.withdrawTwoAsset(amountA, amountB);
             console.log(res);
-            Toast.success({message:'赎回成功', onClose: () => {
+            Toast.success({message:'解押成功', onClose: () => {
               visible.value = false;
               onGetApproveStatus();
             }})
@@ -571,7 +582,7 @@ export default {
         pledgeType,
         OperTypeText,
         operType,
-        wellet_address,
+        encryption_wellet_address,
         singleTotalAmount,
         multiTotalAmountA,
         multiTotalAmountB,

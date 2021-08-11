@@ -2,6 +2,7 @@ export interface IGlobalHooksState {
     isShowTabbar: Ref<boolean>
     tabbarIndex: Ref<number>
     money_config: Ref<IMoneyConfigResDTO>
+    encryption_wellet_address: Ref<string | null>
     wellet_address: Ref<string | null>
 }
 
