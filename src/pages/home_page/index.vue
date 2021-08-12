@@ -78,10 +78,12 @@ import * as utils from '@/utils/index';
 import { useGlobalHooks } from '@/hooks';
 import * as routerPaths from '@/constants/app_routes_path';
 import {  SinglePie, MultiPie, RewardContract, OlptContract, pieAddress, tokenAddress } from '@/tronlink/index';
-import { onMounted,ref, computed } from 'vue';
+import { onMounted,ref, computed ,onUnmounted} from 'vue';
 export default {
     name: 'home_page',
     setup() {
+      let timer: number = 0;
+      const isRequest = ref<boolean>(false);
       const { encryption_wellet_address, wellet_address, onGetWellet } = useGlobalHooks();
       const singleUserIncome = ref<number>(0);  // 单币矿池收益
       const doubleUserIncome = ref<number>(0);  // 双币矿池收益
@@ -105,9 +107,9 @@ export default {
           try {
             const res = await singlePie.userIncome();
             const income:number = (window as any).tronWeb.toDecimal(res.income);
-            console.log(Number(new Decimal(income).div(pow)),income)
             singleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4); 
          } catch(err) {
+           console.log(err);
            utils.toast(err || err.message);
          }
       }
@@ -119,6 +121,7 @@ export default {
             const income:number = (window as any).tronWeb.toDecimal(res.income);
             doubleUserIncome.value = utils.toFixed(Number(new Decimal(income).div(pow)), 4);
           } catch(err) {
+            console.log(err);
            utils.toast(err || err.message);
           }
       }
@@ -129,6 +132,7 @@ export default {
             const supply = (window as any).tronWeb.toDecimal(res);
             maxSupply.value = Number(new Decimal(supply).div(pow))
           } catch(err) {
+            console.log(err);
            utils.toast(err || err.message);
           }
       }
@@ -140,6 +144,7 @@ export default {
             const income = (window as any).tronWeb.toDecimal(res.income);
             rewardUserIncome.value = Number(new Decimal(income).div(pow))
           } catch(err) {
+            console.log(err);
            utils.toast(err || err.message);
           }
       }
@@ -153,8 +158,30 @@ export default {
             }
           } catch(err) {
            utils.toast(err || err.message);
-           utils.loadingClean();
           }
+      }
+
+       /** 轮询收益 */
+      const onPollIncome = async () => {
+         clearInterval(timer);
+         onPromiseAll();
+         timer = setInterval (() => {
+           console.log('polling-home');
+           onPromiseAll();
+         }, 1000);
+      }
+
+      const onPromiseAll = async () => {
+        try {
+          if (!isRequest.value) {
+            isRequest.value = true;
+            await Promise.all([onGetUserIncome(), onGetDoubleUserIncome(), onGetRewardUserIncome()]);
+            isRequest.value = false;
+          }
+          utils.loadingClean();
+        } catch(err) {
+          console.log(err);
+        }
       }
 
       const onCheckToken = () => {
@@ -189,11 +216,9 @@ export default {
       
 
       onMounted(() => {
-        onGetUserIncome();
-        onGetDoubleUserIncome();
         onGetMaxSupply();
-        onGetRewardUserIncome();
         onRecommedCode();
+        onPollIncome();
         let ClipboardJSObj= new ClipboardJS('.olpcgaf-homepage-darkcard-btn')
             ClipboardJSObj.on('success', function(e) {
               Toast.success('复制成功');
@@ -203,6 +228,12 @@ export default {
                 e.clearSelection();
             })
       })
+
+      onUnmounted(() => {
+        console.log('onUnmounted')
+        clearInterval(timer);
+      })
+
       return {routerPaths,encryption_wellet_address,maxSupply , rewardUserIncome,code,tokenAddress,recommed_link, onRouter,onCheckToken,  onGetWellet, onOpenWemmet, allIcomeAmount} 
     }
   };

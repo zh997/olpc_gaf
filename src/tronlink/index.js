@@ -21,7 +21,7 @@ export const tokenAddress = {
 export const pieAddress = {
     single: 'TJnaM32oyo3PqkCUpQ2vGg1qZ2BnYrPfWG',
     multi: 'TF2x5a1vaEaNyDXY2p43eoeMQuPFwyKofd',
-    reward: 'TTCDSKBXz44xiWfJvBYDTFX8CvkrDLtpy2'
+    reward: 'TCC5xkLQBXdfRFsUQWfDt4QdN5vxPZ8TfJ'
 }
 
 /** 
@@ -217,7 +217,7 @@ export class MultiPie {
         }
         /** 用户提取挖矿收益 */
     claim(amount) {
-        return window.multiPieContract.claim(this.wellet_address, window.tronWeb.toHex(amount)).call();
+        return window.multiPieContract.claim(this.wellet_address, window.tronWeb.toHex(amount)).send();
     }
 
 }
