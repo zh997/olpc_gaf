@@ -65,6 +65,22 @@
       <div class="olpcgaf-select-shadowcard-logos">
            <img src="../../assets/gary_logo.png" class="olpcgaf-select-shadowcard-logo" alt="">
       </div>
+        <!-- <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needOlpcApprove">
+          <div class="olpcgaf-select-shadowcard-title-label">数量</div>
+          <div class="olpcgaf-select-shadowcard-title-value">{{singleAmount}}</div>
+       </div> -->
+        <p class="olpcgaf-select-shadowcard-text" >暂未开放</p>
+         <!-- <p class="olpcgaf-select-shadowcard-text" v-if="needOlpcApprove">推荐收益 OLPC</p> -->
+       <div class="olpcgaf-select-shadowcard-btn disabled-btn">授权</div>
+       <!-- <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'PLEDGE')">质押</div> -->
+       <!-- <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'HARVEST')">收获</div> -->
+        <!-- <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'REDEEM')">解押</div> -->
+        <!-- <p class="olpcgaf-select-shadowcard-text" v-if="needOlpcApprove">推荐算力: {{ability}}</p> -->
+    </div>
+     <div class="olpcgaf-select-shadowcard">
+      <div class="olpcgaf-select-shadowcard-logos">
+           <!-- <img src="../../assets/gary_logo.png" class="olpcgaf-select-shadowcard-logo" alt=""> -->
+      </div>
     
          <div  class="olpcgaf-select-shadowcard-title-wrap" v-if="needOlpcApprove">
           <!-- <div class="olpcgaf-select-shadowcard-title-label">收益</div> -->
@@ -74,15 +90,16 @@
           <div class="olpcgaf-select-shadowcard-title-label">数量</div>
           <div class="olpcgaf-select-shadowcard-title-value">{{singleAmount}}</div>
        </div> -->
-        <p class="olpcgaf-select-shadowcard-text" v-if="!needOlpcApprove">待授权</p>
-         <p class="olpcgaf-select-shadowcard-text" v-if="needOlpcApprove">推荐收益 OLPC</p>
-       <div class="olpcgaf-select-shadowcard-btn"  @click="onApprove(pieAddress.single,tokenAddress.OLPC)" v-if="!needOlpcApprove">授权</div>
+        <!-- <p class="olpcgaf-select-shadowcard-text" v-if="!needOlpcApprove">待授权</p> -->
+         <p class="olpcgaf-select-shadowcard-text">推荐收益 OLPC</p>
+       <!-- <div class="olpcgaf-select-shadowcard-btn"  @click="onApprove(pieAddress.single,tokenAddress.OLPC)" v-if="!needOlpcApprove">授权</div> -->
        <!-- <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'PLEDGE')">质押</div> -->
-       <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'HARVEST')">收获</div>
+       <div class="olpcgaf-select-shadowcard-btn" @click="onShowPopup('OLPC', 'HARVEST')">收获</div>
         <!-- <div class="olpcgaf-select-shadowcard-btn" v-if="needOlpcApprove"  @click="onShowPopup('OLPC', 'REDEEM')">解押</div> -->
-        <p class="olpcgaf-select-shadowcard-text" v-if="needOlpcApprove">推荐算力: {{ability}}</p>
-    </div>
+        <p class="olpcgaf-select-shadowcard-text" >推荐算力: {{ability}}</p>
   </div>
+  </div>
+  
   <van-popup v-model:show="visible" @close="onPopupClose" position="bottom">
       <div class="popup-form-wrap">
         <div class="popup-form-title">{{OperTypeText[operType]}} {{operType !== 'HARVEST' ? (pledgeType === "GAFP" ? 'GAF-TRX ': 'OLPC-TRX ') + pledgeType : 'OLPC'}}</div>
@@ -125,7 +142,7 @@
 
 <script lang='ts'>
 import { useRouter } from 'vue-router';
-import { onMounted, ref, onUnmounted, computed } from 'vue';
+import { onMounted, ref, onUnmounted, computed, watch } from 'vue';
 import { Toast, Popup,Field,Button } from 'vant';
 import Decimal from 'decimal.js';
 import { pow } from '@/constants/index';
@@ -238,6 +255,54 @@ export default {
         console.log('onUnmounted')
         clearInterval(timer);
       })
+
+      watch(gafpAmount, () => {
+        if (pledgeType.value === "GAFP+OLPC" && operType.value === "PLEDGE") {
+          if(Number(gafpAmount.value) > multiTotalAmountB.value) {
+            gafpAmount.value = multiTotalAmountB.value.toString()
+          }
+          const value = new Decimal(Number(gafpAmount.value)).mul(15);
+          if (Number(value) > multiTotalAmountA.value) {
+            OLPCAmount.value = multiTotalAmountA.value.toString();
+          }
+          OLPCAmount.value = Number(value).toString();
+        }
+        if (pledgeType.value === "GAFP+OLPC" && operType.value === "REDEEM") {
+          if(Number(gafpAmount.value) > doubleAmountB.value) {
+            gafpAmount.value = doubleAmountB.value.toString()
+          }
+          const value = new Decimal(Number(gafpAmount.value)).mul(15);
+          if (Number(value) > doubleAmountA.value) {
+            OLPCAmount.value = doubleAmountA.value.toString();
+          }
+          OLPCAmount.value = Number(value).toString();
+        }
+      })
+
+      watch(OLPCAmount, () => {
+         if (pledgeType.value === "GAFP+OLPC" && operType.value === "PLEDGE") {
+          if(Number(OLPCAmount.value) > multiTotalAmountA.value) {
+            OLPCAmount.value = multiTotalAmountA.value.toString()
+          }
+          const value = new Decimal(Number(OLPCAmount.value)).div(15);
+          if (Number(value) > multiTotalAmountB.value) {
+            gafpAmount.value = multiTotalAmountB.value.toString();
+          }
+          gafpAmount.value = Number(value).toString();
+        }
+        if (pledgeType.value === "GAFP+OLPC" && operType.value === "REDEEM") {
+          if(Number(OLPCAmount.value) > doubleAmountA.value) {
+            OLPCAmount.value = doubleAmountA.value.toString()
+          }
+          const value = new Decimal(Number(OLPCAmount.value)).div(15);
+          if (Number(value) > doubleAmountB.value) {
+            gafpAmount.value = doubleAmountB.value.toString();
+          }
+          gafpAmount.value = Number(value).toString();
+        }
+      })
+
+
       
       /**  获取授权状态 */
       const onGetApproveStatus = async () => {
@@ -588,17 +653,6 @@ export default {
           // utils.toast(err || err.message);
         }
       }
-
-      const olpcAmountvalue = computed({
-        get: () => {
-          const value = new Decimal(Number(gafpAmount.value)).mul(15);
-          if (pledgeType.value === "GAFP+OLPC" && operType.value === "PLEDGE" && Number(value) > multiTotalAmountA.value) {
-            return multiTotalAmountA.value
-          }
-          return value;
-        },
-        set: () => {}
-      })
       
       
       /** 弹窗关闭，清空表单 */
