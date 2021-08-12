@@ -221,8 +221,8 @@ export default {
            OLPCAmount.value = singleAmount.value.toString();
         }
         if(pledgeType.value  === "GAFP+OLPC" && operType.value === "REDEEM") {
-          gafpAmount.value = doubleAmountA.value.toString();
-          OLPCAmount.value = doubleAmountB.value.toString();
+          OLPCAmount.value = doubleAmountA.value.toString();
+          gafpAmount.value = doubleAmountB.value.toString();
         }
       }
 
@@ -397,6 +397,7 @@ export default {
           try {
             const res = await singlePie.getUserStakeAsset();
             const amount:number = (window as any).tronWeb.toDecimal(res._stake)
+            console.log(amount);
             singleAmount.value = Number(new Decimal(amount).div(pow));
           } catch(err) {
             console.log(err);
@@ -574,6 +575,7 @@ export default {
             console.log(Number(OLPCAmount.value) * pow)
             const amountA = Number(OLPCAmount.value) * pow;
             const amountB = Number(gafpAmount.value) * pow;
+            console.log(amountA, amountB)
             const res = await multiPie.withdrawTwoAsset(amountA, amountB);
             console.log(res);
             Toast.success({message:'解押成功', onClose: () => {
