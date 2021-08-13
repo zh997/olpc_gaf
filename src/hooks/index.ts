@@ -17,7 +17,7 @@ export const wellet_address = ref<string | null>(address);
 /** 维护全局状态 */
 export const useGlobalHooks = (): IGlobalHooks => {
 
-   const w_address = (window as any).tronWeb? (window as any).tronWeb.defaultAddress.base58 : '';
+   
    
    /** 控制tabbar显示隐藏 */
    const onShowTabbar = (val: boolean, index?: number) => {
@@ -34,20 +34,27 @@ export const useGlobalHooks = (): IGlobalHooks => {
    /** 获取钱包地址 */
 
    const onGetWellet = () => {
-      if(!encryption_wellet_address.value) {
-        utils.loading('正在链接钱包');
-        setTimeout(() => {
-          const startText = w_address.substring(0, 5);
-          const endText = w_address.substring(w_address.length - 5, w_address.length);
-          const address =  startText + '******' + endText
-          localStorage.setItem('encryption_address', address);
-          encryption_wellet_address.value = address;
-          utils.loadingClean();
-        }, 1000)
-      }
+      // if(!encryption_wellet_address.value) {
+      //   utils.loading('正在链接钱包');
+      //   setTimeout(() => {
+      //     const startText = w_address.substring(0, 5);
+      //     const endText = w_address.substring(w_address.length - 5, w_address.length);
+      //     const address =  startText + '******' + endText
+      //     localStorage.setItem('encryption_address', address);
+      //     encryption_wellet_address.value = address;
+      //     utils.loadingClean();
+      //   }, 1000)
+      // }
+      const w_address = (window as any).tronWeb.defaultAddress.base58;
+      const startText = w_address.substring(0, 5);
+      const endText = w_address.substring(w_address.length - 5, w_address.length);
+      const address =  startText + '******' + endText
+      localStorage.setItem('encryption_address', address);
+      wellet_address.value = w_address;
+      encryption_wellet_address.value = address;
    }
 
-   wellet_address.value = w_address;
+  
 
    /** 返回状态 */
    return { isShowTabbar, tabbarIndex, money_config, encryption_wellet_address, wellet_address, onShowTabbar, onGetMoneyConfig, onGetWellet };

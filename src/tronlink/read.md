@@ -3,7 +3,7 @@ OLPT lpToken地址：TYuhhCibRSuw3mECXcLbKrLK9XnubdAX1y
 
 注：单币矿池使用GAFT进行挖矿并进行授权，双币矿池使用了GAFT和OLPT两种，都需要进行授权进行挖矿
 
-矿池地址：TJnaM32oyo3PqkCUpQ2vGg1qZ2BnYrPfWG
+矿池地址：TFo1EYudqe31nhC48P7ke3VRFzmq7hz7HK
 单币矿池如下：
 //获取矿池总质押数量
 getTotalAmount()public view returns (uint256 amountA)
@@ -24,7 +24,7 @@ function getUserWalletAsset(address token,address customer) public view returns(
 
 
 
-矿池地址：TAa3Gw2rAPnfN4czsWcGRNKFDjPsmdKoJW
+矿池地址：TDKcSunNuSKzG4HHvjhXEBtqssS5kwBhFg
 双币矿池如下：
 //矿池内两币种的质押总量
 function getTotalAmount()public view returns (uint256 amountA,uint256 amountB)
@@ -45,7 +45,7 @@ function getUserWalletAsset(address token,address customer) public view returns(
 
 
 
-reward池：TTCDSKBXz44xiWfJvBYDTFX8CvkrDLtpy2
+reward池：TV2nNqixkXhCsqEP8Fd45Nm5dAK57s1oQz
 //用户填写推荐人钱包地址在链上生成推荐关系
 function recommedCode(address _recommed,address _customer) public
 //获取用户通过推荐获得的收益
@@ -55,6 +55,8 @@ function claim(address customer,uint256 amount) public
 //获取用户的各项信息，1.质押数量（不用展示） 2.推荐算力 3.推荐人地址 4.用户负债（不用展示）5.用户收益（不用展示）
 function getUserInfo(address _customer) public view returns(uint256 _stake,uint256 _ability,address _recommed,uint256 _debt,uint256 _reward)
 
+
 用来获取最大供应量
 OLPT地址：TLggZp2ida3LgTuX3FdWKTXBp2dCzeb4Lt
 function maxSupply() public view returns(uint256);
+GAFT地址：TXVVqdjn7E9KDNWeQX9DhcQ47hsMVJsgvZ

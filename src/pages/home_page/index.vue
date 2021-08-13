@@ -3,10 +3,10 @@
   <div class="olpcgaf-homepage">
     <div class="olpcgaf-homepage-header">
      <img src="../../assets/3.png" class="olpcgaf-homepage-header-logo" alt="">
-      <div class="olpcgaf-homepage-header-btn" @click="onGetWellet" v-if="!encryption_wellet_address">
+      <!-- <div class="olpcgaf-homepage-header-btn" @click="onGetWellet" v-if="!encryption_wellet_address">
        我的钱包
-     </div>
-     <div class="olpcgaf-homepage-header-address" v-else>
+     </div> -->
+     <div class="olpcgaf-homepage-header-address">
        {{encryption_wellet_address}}
      </div>
     </div>
@@ -84,7 +84,7 @@ export default {
     setup() {
       let timer: number = 0;
       const isRequest = ref<boolean>(false);
-      const { encryption_wellet_address, wellet_address, onGetWellet } = useGlobalHooks();
+      const { encryption_wellet_address, wellet_address } = useGlobalHooks();
       const singleUserIncome = ref<number>(0);  // 单币矿池收益
       const doubleUserIncome = ref<number>(0);  // 双币矿池收益
       const rewardUserIncome = ref<number>(0);  // 推荐收益
@@ -234,7 +234,7 @@ export default {
         clearInterval(timer);
       })
 
-      return {routerPaths,encryption_wellet_address,maxSupply , rewardUserIncome,code,tokenAddress,recommed_link, onRouter,onCheckToken,  onGetWellet, onOpenWemmet, allIcomeAmount} 
+      return {routerPaths,encryption_wellet_address,maxSupply , rewardUserIncome,code,tokenAddress,recommed_link, onRouter,onCheckToken, onOpenWemmet, allIcomeAmount} 
     }
   };
 </script>
