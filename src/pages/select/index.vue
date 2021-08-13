@@ -218,7 +218,7 @@ export default {
         }
         if(pledgeType.value  === "GAFP+OLPC" && operType.value === "PLEDGE") {
           // OLPCAmount.value = multiTotalAmountA.value.toString();
-          gafpAmount.value = multiTotalAmountA.value.toString();
+          gafpAmount.value = multiTotalAmountB.value.toString();
         }
 
         if(pledgeType.value  === "GAFP" && operType.value === "HARVEST") {
@@ -239,7 +239,7 @@ export default {
         }
         if(pledgeType.value  === "GAFP+OLPC" && operType.value === "REDEEM") {
           // OLPCAmount.value = doubleAmountA.value.toString();
-          gafpAmount.value = doubleAmountA.value.toString();
+          gafpAmount.value = doubleAmountB.value.toString();
         }
       }
 
