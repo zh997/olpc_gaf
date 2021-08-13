@@ -3,10 +3,10 @@
   <div class="olpcgaf-select">
     <div class="olpcgaf-select-header">
      <img src="../../assets/3.png" class="olpcgaf-select-header-logo" alt="">
-     <div class="olpcgaf-select-header-btn" @click="onGetWellet" v-if="!encryption_wellet_address">
+     <!-- <div class="olpcgaf-select-header-btn" @click="onGetWellet" v-if="!encryption_wellet_address">
        我的钱包
-     </div>
-     <div class="olpcgaf-select-header-address" v-else>
+     </div> -->
+     <div class="olpcgaf-select-header-address">
        {{encryption_wellet_address}}
      </div>
     </div>
@@ -121,9 +121,9 @@
         <div class="popup-form-count" v-if="pledgeType === 'GAFP'  && operType === 'HARVEST'"><span>{{singleUserIncome}}</span> OLPC可收获</div>
         <div class="popup-form-count" v-if="pledgeType === 'OLPC' && operType === 'HARVEST'"><span>{{recommedUserIncome}}</span> OLPC可收获</div>
         <div class="popup-form-count" v-if="pledgeType === 'GAFP+OLPC' && operType === 'HARVEST'"><span>{{doubleUserIncome}}</span> OLPC可收获</div>
-        <van-field v-model="OLPCAmount" v-if="pledgeType === 'OLPC' || (pledgeType === 'GAFP+OLPC' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'OLPC-TRX LP'} ${OperTypeText[operType]}数量`">
+        <van-field v-model="OLPCAmount" :disabled="disabled" v-if="pledgeType === 'OLPC' || (pledgeType === 'GAFP+OLPC' && operType !== 'HARVEST')" class="popup-form-item" type="number" :placeholder="`请输入${operType === 'HARVEST' ? 'OLPC' :'OLPC-TRX LP'} ${OperTypeText[operType]}数量`">
           <template #button>
-            <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">OLPC-TRX LP <span @click="onSetAll">最大</span></div>
+            <div class="popup-form-item-unit" v-if="operType !== 'HARVEST'">OLPC-TRX LP <span @click="onSetAll" v-if="!disabled">最大</span></div>
             <div class="popup-form-item-unit" v-else>OLPC <span @click="onSetAll">最大</span></div>
           </template>
         </van-field>
@@ -167,7 +167,7 @@ export default {
          "HARVEST": '收获',
          "REDEEM": '解押'
       }
-      const { encryption_wellet_address, onGetWellet } = useGlobalHooks();
+      const { encryption_wellet_address } = useGlobalHooks();
 
       const isRequest = ref<boolean>(false);
       const singlePie = new SinglePie();
@@ -217,7 +217,7 @@ export default {
           OLPCAmount.value = singleTotalAmount.value.toString();
         }
         if(pledgeType.value  === "GAFP+OLPC" && operType.value === "PLEDGE") {
-          OLPCAmount.value = multiTotalAmountA.value.toString();
+          // OLPCAmount.value = multiTotalAmountA.value.toString();
           gafpAmount.value = multiTotalAmountB.value.toString();
         }
 
@@ -238,7 +238,7 @@ export default {
            OLPCAmount.value = singleAmount.value.toString();
         }
         if(pledgeType.value  === "GAFP+OLPC" && operType.value === "REDEEM") {
-          OLPCAmount.value = doubleAmountA.value.toString();
+          // OLPCAmount.value = doubleAmountA.value.toString();
           gafpAmount.value = doubleAmountB.value.toString();
         }
       }
@@ -256,58 +256,76 @@ export default {
         clearInterval(timer);
       })
 
-      watch(gafpAmount, () => {
-        if (pledgeType.value === "GAFP+OLPC" && operType.value === "PLEDGE") {
-          if(Number(gafpAmount.value) > multiTotalAmountB.value) {
-            gafpAmount.value = multiTotalAmountB.value.toString()
+      const disabled = computed({
+         get: () => {
+              return pledgeType.value === 'GAFP+OLPC' && operType.value !== 'HARVEST'
+          },
+          set: () => {
+
           }
-          const value = new Decimal(Number(gafpAmount.value)).mul(15);
-          if (Number(value) > multiTotalAmountA.value) {
-            OLPCAmount.value = multiTotalAmountA.value.toString();
-          }
-          OLPCAmount.value = Number(value).toString();
-        }
-        if (pledgeType.value === "GAFP+OLPC" && operType.value === "REDEEM") {
-          if(Number(gafpAmount.value) > doubleAmountB.value) {
-            gafpAmount.value = doubleAmountB.value.toString()
-          }
-          const value = new Decimal(Number(gafpAmount.value)).mul(15);
-          if (Number(value) > doubleAmountA.value) {
-            OLPCAmount.value = doubleAmountA.value.toString();
-          }
-          OLPCAmount.value = Number(value).toString();
-        }
       })
 
-      watch(OLPCAmount, () => {
-         if (pledgeType.value === "GAFP+OLPC" && operType.value === "PLEDGE") {
-          if(Number(OLPCAmount.value) > multiTotalAmountA.value) {
-            OLPCAmount.value = multiTotalAmountA.value.toString()
+      watch(gafpAmount, async () => {
+       
+          try{
+            const amount = Number(new Decimal(Number(gafpAmount.value)).mul(pow));
+            const res = await multiPie.getAmountIn(amount);
+            const _amountIn:number = (window as any).tronWeb.toDecimal(res._amountIn);
+            const value = Number(new Decimal(_amountIn).div(pow))
+            console.log(value);
+            
+            if (pledgeType.value === "GAFP+OLPC" && operType.value === "PLEDGE") {
+              // if(Number(gafpAmount.value) > multiTotalAmountB.value) {
+              //   gafpAmount.value = multiTotalAmountB.value.toString()
+              // }
+              // if (Number(value) > multiTotalAmountA.value) {
+              //   OLPCAmount.value = multiTotalAmountA.value.toString();
+              // }
+              OLPCAmount.value = Number(value).toString();
+            }
+            if (pledgeType.value === "GAFP+OLPC" && operType.value === "REDEEM") {
+              // if(Number(gafpAmount.value) > doubleAmountB.value) {
+              //   gafpAmount.value = doubleAmountB.value.toString()
+              // }
+              // if (Number(value) > doubleAmountA.value) {
+              //   OLPCAmount.value = doubleAmountA.value.toString();
+              // }
+              OLPCAmount.value = Number(value).toString();
+            }
+          } catch(err){
+            console.log(err);
           }
-          const value = new Decimal(Number(OLPCAmount.value)).div(15);
-          if (Number(value) > multiTotalAmountB.value) {
-            gafpAmount.value = multiTotalAmountB.value.toString();
-          }
-          gafpAmount.value = Number(value).toString();
-        }
-        if (pledgeType.value === "GAFP+OLPC" && operType.value === "REDEEM") {
-          if(Number(OLPCAmount.value) > doubleAmountA.value) {
-            OLPCAmount.value = doubleAmountA.value.toString()
-          }
-          const value = new Decimal(Number(OLPCAmount.value)).div(15);
-          if (Number(value) > doubleAmountB.value) {
-            gafpAmount.value = doubleAmountB.value.toString();
-          }
-          gafpAmount.value = Number(value).toString();
-        }
       })
+
+      // watch(OLPCAmount, () => {
+      //    if (pledgeType.value === "GAFP+OLPC" && operType.value === "PLEDGE") {
+      //     if(Number(OLPCAmount.value) > multiTotalAmountA.value) {
+      //       OLPCAmount.value = multiTotalAmountA.value.toString()
+      //     }
+      //     const value = new Decimal(Number(OLPCAmount.value)).div(15);
+      //     if (Number(value) > multiTotalAmountB.value) {
+      //       gafpAmount.value = multiTotalAmountB.value.toString();
+      //     }
+      //     gafpAmount.value = Number(value).toString();
+      //   }
+      //   if (pledgeType.value === "GAFP+OLPC" && operType.value === "REDEEM") {
+      //     if(Number(OLPCAmount.value) > doubleAmountA.value) {
+      //       OLPCAmount.value = doubleAmountA.value.toString()
+      //     }
+      //     const value = new Decimal(Number(OLPCAmount.value)).div(15);
+      //     if (Number(value) > doubleAmountB.value) {
+      //       gafpAmount.value = doubleAmountB.value.toString();
+      //     }
+      //     gafpAmount.value = Number(value).toString();
+      //   }
+      // })
 
 
       
       /**  获取授权状态 */
       const onGetApproveStatus = async () => {
         try {
-          utils.loading('正在获取数据');
+          // utils.loading('正在获取数据');
           const [res1, res2, res3, res4] = await Promise.all([
             singlePie.getTokenAllownceAmount(tokenAddress.GAFP),
             singlePie.getTokenAllownceAmount(tokenAddress.OLPC),
@@ -435,7 +453,7 @@ export default {
           try {
             const res = await rewardContract.getUserInfo();
             const _ability:number = (window as any).tronWeb.toDecimal(res._ability);
-            ability.value = Number(new Decimal(_ability).div(pow))
+            ability.value = utils.toFixed(Number(new Decimal(_ability).div(pow)), 4)
           } catch(err) {
             console.log(err);
           //  utils.toast(err || err.message);
@@ -449,8 +467,8 @@ export default {
             console.log(res);
             const amountA:number = (window as any).tronWeb.toDecimal(res.amountA);
             const amountB:number = (window as any).tronWeb.toDecimal(res.amountB);
-            doubleAmountA.value = Number(new Decimal(amountA).div(pow));
-            doubleAmountB.value = Number(new Decimal(amountB).div(pow));
+            doubleAmountB.value = Number(new Decimal(amountA).div(pow));
+            doubleAmountA.value = Number(new Decimal(amountB).div(pow));
           } catch(err) {
             console.log(err);
            utils.toast(err || err.message);
@@ -489,8 +507,8 @@ export default {
             multiPie.getUserWalletAsset(tokenAddress.GAFP)]);
             const amountA:number = (window as any).tronWeb.toDecimal(resA);
             const amountB:number = (window as any).tronWeb.toDecimal(resB);
-            multiTotalAmountA.value = Number(new Decimal(amountA).div(pow));
-            multiTotalAmountB.value = Number(new Decimal(amountB).div(pow));
+            multiTotalAmountB.value = Number(new Decimal(amountA).div(pow));
+            multiTotalAmountA.value = Number(new Decimal(amountB).div(pow));
           } catch(err) {
             console.log(err);
           //  utils.toast(err || err.message);
@@ -558,7 +576,7 @@ export default {
             console.log(Number(OLPCAmount.value) * pow)
             const amountA = Number(OLPCAmount.value) * pow;
             const amountB = Number(gafpAmount.value) * pow;
-            const res = await multiPie.provideTwoAsset(amountA,amountB);
+            const res = await multiPie.provideTwoAsset(amountB,amountA);
             console.log(res);
             Toast.success({message:'质押成功', onClose: () => {
               visible.value = false;
@@ -641,7 +659,7 @@ export default {
             const amountA = Number(OLPCAmount.value) * pow;
             const amountB = Number(gafpAmount.value) * pow;
             console.log(amountA, amountB)
-            const res = await multiPie.withdrawTwoAsset(amountA, amountB);
+            const res = await multiPie.withdrawTwoAsset(amountB, amountA);
             console.log(res);
             Toast.success({message:'解押成功', onClose: () => {
               visible.value = false;
@@ -688,7 +706,7 @@ export default {
         recommedUserIncome,
         ability,
         utils,
-        onGetWellet,
+        disabled,
         onHidePopup,
         onConfirm,
         onApprove,

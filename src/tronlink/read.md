@@ -56,6 +56,7 @@ function claim(address customer,uint256 amount) public
 function getUserInfo(address _customer) public view returns(uint256 _stake,uint256 _ability,address _recommed,uint256 _debt,uint256 _reward)
 32781456
 
+
 用来获取最大供应量
 OLPT地址：TLggZp2ida3LgTuX3FdWKTXBp2dCzeb4Lt
 function maxSupply() public view returns(uint256);

@@ -10,12 +10,14 @@ import { onMounted, ref } from 'vue';
 import { getTronlinkAddress, initContract, initRewardContract, initOlptContract } from '@/tronlink/index';
 // import * as services from '@/services'; 
 import * as utils from '@/utils/index';
+import { useGlobalHooks } from './hooks';
 
 export default {
    components: {
   },
   setup(){
     const isShowRouter = ref<boolean>(false);
+    const { onGetWellet } = useGlobalHooks();
     const doLogin = async () => {
       /** 获取钱包地址登录 */
       try {
@@ -24,6 +26,7 @@ export default {
         await initContract();
         await initOlptContract();
         await initRewardContract();
+        onGetWellet();
         utils.loadingClean();
         isShowRouter.value = true;
         console.log((window as any).tronWeb);
